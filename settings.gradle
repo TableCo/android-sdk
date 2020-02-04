@@ -1,2 +1,2 @@
-include ':app', ':table-agent'
+include ':sample', ':table'
 rootProject.name='Table Library'
