@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="loginViewModel"
+            type="co.table.agent.android.login.LoginDataViewModel" />
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/colorScreenBG"
+        android:orientation="vertical"
+        tools:context=".login.LoginActivity">
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fillViewport="true">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/colorScreenBG"
+                android:orientation="vertical"
+                android:paddingLeft="30dp"
+                android:paddingRight="30dp">
+
+                <ImageView
+                    android:id="@+id/imageView"
+                    android:layout_width="180dp"
+                    android:layout_height="80dp"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="50dp"
+                    android:src="@drawable/ic_logo" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="50dp"
+                    android:orientation="vertical">
+
+                    <co.table.agent.android.views.CustomTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentLeft="true"
+                        android:text="@string/workspace"
+                        android:textColor="@color/colorBlack"
+                        android:textSize="18sp"
+                        app:customFont="regular" />
+
+                    <co.table.agent.android.views.CustomTextView
+                        android:id="@+id/tvWorkspace"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:layout_marginTop="5dp"
+                        android:text="@{loginViewModel.validWorkSpace()}"
+                        android:textColor="@color/colorPrimary"
+                        android:textSize="16sp"
+                        app:customFont="regular" />
+                </LinearLayout>
+
+                <co.table.agent.android.views.CustomInputTextLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:hint="@string/email_address"
+                    app:customFont="regular">
+
+                    <co.table.agent.android.views.CustomEditText
+                        android:id="@+id/edtEmail"
+                        android:layout_width="match_parent"
+                        android:layout_height="45dp"
+                        android:layout_marginTop="5dp"
+                        android:imeOptions="actionNext"
+                        android:singleLine="true"
+                        android:text=""
+                        android:textColor="@color/colorBlack"
+                        android:textColorHint="@color/colorHint"
+                        app:customFont="regular" />
+                </co.table.agent.android.views.CustomInputTextLayout>
+
+                <co.table.agent.android.views.CustomTextView
+                    android:id="@+id/tvEmailError"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@{loginViewModel.emailError}"
+                    android:textColor="#FF0000" />
+
+                <co.table.agent.android.views.CustomInputTextLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:hint="@string/password"
+                    app:customFont="regular">
+
+                    <co.table.agent.android.views.CustomEditText
+                        android:id="@+id/edtPassword"
+                        android:layout_width="match_parent"
+                        android:layout_height="45dp"
+                        android:layout_marginTop="5dp"
+                        android:imeOptions="actionDone"
+                        android:inputType="textPassword"
+                        android:singleLine="true"
+                        android:text=""
+                        android:textColor="@color/colorBlack"
+                        android:textColorHint="@color/colorHint"
+                        app:customFont="regular" />
+                </co.table.agent.android.views.CustomInputTextLayout>
+
+                <co.table.agent.android.views.CustomTextView
+                    android:id="@+id/tvPasswordError"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@{loginViewModel.passwordError}"
+                    android:textColor="@color/colorRed" />
+
+                <co.table.agent.android.views.CustomButton
+                    android:id="@+id/btnSignIn"
+                    android:layout_width="match_parent"
+                    android:layout_height="45dp"
+                    android:layout_marginTop="20dp"
+                    android:background="@drawable/btn_background"
+                    android:onClick="onLoginClick"
+                    android:text="@string/sign_in"
+                    android:textAllCaps="false"
+                    android:textColor="@color/colorWhite"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    app:customFont="bold" />
+
+                <co.table.agent.android.views.CustomTextView
+                    android:id="@+id/tvServerError"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:text="@{loginViewModel.serverError}"
+                    android:textColor="@color/colorRed" />
+
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp">
+
+                    <View
+                        android:layout_width="wrap_content"
+                        android:layout_height="1dp"
+                        android:layout_centerVertical="true"
+                        android:background="@color/edtBorder" />
+
+                    <co.table.agent.android.views.CustomTextView
+                        android:layout_width="80dp"
+                        android:layout_height="wrap_content"
+                        android:layout_centerHorizontal="true"
+                        android:layout_centerVertical="true"
+                        android:background="@color/colorScreenBG"
+                        android:gravity="center"
+                        android:text="or" />
+
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:id="@+id/btnGoogleSignIn"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:layout_marginTop="30dp"
+                    android:layout_marginBottom="10dp"
+                    android:background="@drawable/edt_border"
+                    android:onClick="onGoogleSignClick">
+
+
+                    <co.table.agent.android.views.CustomTextView
+                        android:id="@+id/tvGoogleSignin"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerHorizontal="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="10dp"
+                        android:drawableLeft="@drawable/googleg_standard_color_18"
+                        android:drawablePadding="10dp"
+                        android:text="@string/sign_with_google"
+                        android:textColor="@color/colorGoogle"
+                        android:textSize="18sp"
+                        app:customFont="regular" />
+                </RelativeLayout>
+
+
+            </LinearLayout>
+
+        </ScrollView>
+
+
+    </LinearLayout>
+</layout>

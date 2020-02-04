@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#327AEA</color>
+    <color name="colorPrimaryDark">#CACED8</color>
+    <color name="colorAccent">#327AEA</color>
+    <color name="colorScreenBG">#FFFFFF</color>
+    <color name="colorWhite">#FFFFFF</color>
+    <color name="edtBorder">#CACED8</color>
+    <color name="colorFieldTitle">#656D79</color>
+    <color name="colorButton">#327AEA</color>
+    <color name="colorHint">#9AA6AC</color>
+    <color name="colorLogout">#CB2334</color>
+    <color name="colorLoginDesc">#9AA6AC</color>
+    <color name="colorBlack">#202425</color>
+    <color name="colorGoogle">#555F64</color>
+    <color name="colorRed">#FF0000</color>
+    <color name="colorLogoutBg">#1AEF5E75</color>
+    <color name="colorText">#202425</color>
+    <color name="colorLabel">#6F7C82</color>
+</resources>

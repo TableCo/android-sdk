@@ -1,0 +1,32 @@
+<resources>
+    <string name="app_name">Table Agent App</string>
+    <string name="workspace">Workspace</string>
+    <string name="enter_your_workspace_name">Enter your workspace name</string>
+    <string name="next">Next</string>
+    <string name="sign_in">Sign In</string>
+    <string name="email_address">Email Address</string>
+    <string name="password">Password</string>
+    <string name="sign_with_google">Sign with Google</string>
+    <string name="all_conversation">All Conversations</string>
+    <string name="account_setting">Account Settings</string>
+    <string name="login_description">The next-generation digital communications platform for companies to acquire, retain, and connect with their customers.</string>
+    <string name="logout">Logout</string>
+    <string name="app_version">App Version</string>
+    <string name="name">Name</string>
+    <string name="pls_enter_email">Please enter an email address</string>
+    <string name="pls_enter_valid_email">Please enter a valid email address</string>
+    <string name="pls_enter_password">Please enter a password</string>
+    <string name="pls_enter_valid_password">Please enter a valid password</string>
+    <string name="pls_wait">Please wait....</string>
+    <string name="server_client_id">560341208563-89ke9fkkpjjndbfat86c3oegognkfjtc.apps.googleusercontent.com</string>
+    <string name="conversation_settings">Conversation Settings</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+    <string name="msg_permission">This app may not work correctly without the requested permissions. Open the app settings screen to modify app permissions.</string>
+    <string name="permission">Permission</string>
+    <string name="ok">Ok</string>
+    <string name="file_chooser">File Chooser</string>
+    <string name="pls_enter_valid_workspace">Please enter valid workspace.</string>
+    <string name="flip_camera">Flip Camera</string>
+    <string name="end_call">End Call</string>
+</resources>

@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="accountViewModel"
+            type="co.table.agent.android.account.AccountDataViewModel" />
+    </data>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/colorScreenBG"
+        android:orientation="vertical"
+        tools:context=".account.AccountSettingActivity">
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="@color/colorWhite"
+            android:elevation="1dp">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <ImageView
+                    android:id="@+id/ivBack"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_centerVertical="true"
+                    android:onClick="onBackClick"
+                    android:src="@drawable/ic_back" />
+
+                <co.table.agent.android.views.CustomTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:layout_centerVertical="true"
+                    android:text="@string/account_setting"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/colorBlack"
+                    app:customFont="medium" />
+
+
+            </RelativeLayout>
+
+        </androidx.appcompat.widget.Toolbar>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="10dp">
+
+            <ScrollView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:fillViewport="true">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@color/colorScreenBG"
+                    android:orientation="vertical">
+
+
+                    <co.table.agent.android.views.CustomTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="20dp"
+                        android:text="@string/name"
+                        android:textColor="@color/colorLabel"
+                        android:textSize="18sp"
+                        app:customFont="regular" />
+
+
+                    <co.table.agent.android.views.CustomTextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:text="@{accountViewModel.userModel.profile.firstName+' '+accountViewModel.userModel.profile.lastName}"
+                        android:textColor="@color/colorText"
+                        android:textSize="18sp"
+                        app:customFont="regular" />
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="2px"
+                        android:layout_marginTop="10dp"
+                        android:background="@color/edtBorder" />
+
+                    <co.table.agent.android.views.CustomTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="20dp"
+                        android:text="@string/workspace"
+                        android:textColor="@color/colorLabel"
+                        android:textSize="18sp"
+                        app:customFont="regular" />
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp">
+
+                        <co.table.agent.android.views.CustomTextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@{accountViewModel.workSpaceName}"
+                            android:textSize="18sp"
+                            android:textColor="@color/colorText"
+                            app:customFont="regular" />
+                        <co.table.agent.android.views.CustomTextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentRight="true"
+                            android:text=".table.co"
+                            android:textSize="18sp"
+                            android:textColor="@color/colorHint"
+                            app:customFont="regular" />
+                    </RelativeLayout>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="2px"
+                        android:layout_marginTop="10dp"
+                        android:background="@color/edtBorder" />
+
+
+                    <co.table.agent.android.views.CustomTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="20dp"
+                        android:text="@string/app_version"
+                        android:textColor="@color/colorLabel"
+                        android:textSize="18sp"
+                        app:customFont="regular" />
+
+                    <co.table.agent.android.views.CustomTextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:text="@{accountViewModel.appVersion}"
+                        android:textColor="@color/colorText"
+                        android:textSize="18sp"
+                        app:customFont="regular" />
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="2px"
+                        android:layout_marginTop="10dp"
+                        android:background="@color/edtBorder" />
+
+
+                </LinearLayout>
+
+            </ScrollView>
+
+            <co.table.agent.android.views.CustomTextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_gravity="bottom"
+                android:background="@drawable/btn_logout_background"
+                android:gravity="center"
+                android:onClick="onLogoutClick"
+                android:padding="10dp"
+                android:text="@string/logout"
+                android:textColor="@color/colorLogout"
+                android:textSize="18sp"
+                app:customFont="regular" />
+
+        </RelativeLayout>
+
+
+    </LinearLayout>
+</layout>
