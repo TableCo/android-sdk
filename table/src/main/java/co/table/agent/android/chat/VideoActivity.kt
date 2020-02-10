@@ -21,7 +21,6 @@ import co.table.agent.android.jetpack.lifecycle.ApiLifeCycle
 import co.table.agent.android.network.API
 import co.table.agent.android.network.ApiResponseInterface
 import co.table.agent.android.views.CustomDialog
-import com.crashlytics.android.Crashlytics
 import com.opentok.android.*
 import kotlinx.android.synthetic.main.activity_video.*
 
@@ -228,7 +227,7 @@ class VideoActivity : AppCompatActivity(), ApiResponseInterface, Session.Session
     }
 
     override fun onCameraError(p0: Publisher?, p1: OpentokError?) {
-        Crashlytics.log(Log.ERROR,"Camera",p1?.message)
+//        Crashlytics.log(Log.ERROR,"Camera",p1?.message)
     }
 
     override fun onDisconnected(p0: Session?) {
@@ -237,7 +236,7 @@ class VideoActivity : AppCompatActivity(), ApiResponseInterface, Session.Session
 
     override fun onError(p0: Session?, p1: OpentokError?) {
         Log.i("Session Error", p1?.message)
-        Crashlytics.log(Log.ERROR,"Session",p1?.message)
+//        Crashlytics.log(Log.ERROR,"Session",p1?.message)
     }
 
     override fun onStreamCreated(p0: PublisherKit?, p1: Stream?) {
@@ -249,7 +248,7 @@ class VideoActivity : AppCompatActivity(), ApiResponseInterface, Session.Session
     }
 
     override fun onError(p0: PublisherKit?, p1: OpentokError?) {
-        Crashlytics.log(Log.ERROR,"Publisher",p1?.message)
+//        Crashlytics.log(Log.ERROR,"Publisher",p1?.message)
     }
 
     override fun onConnected(p0: SubscriberKit?) {
@@ -262,7 +261,7 @@ class VideoActivity : AppCompatActivity(), ApiResponseInterface, Session.Session
     }
 
     override fun onError(p0: SubscriberKit?, p1: OpentokError?) {
-        Crashlytics.log(Log.ERROR,"Subscriber",p1?.message)
+//        Crashlytics.log(Log.ERROR,"Subscriber",p1?.message)
     }
 
     override fun onReconnected(p0: Session?) {

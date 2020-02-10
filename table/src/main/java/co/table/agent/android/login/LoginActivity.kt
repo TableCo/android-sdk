@@ -16,7 +16,6 @@ import co.table.agent.android.databinding.ActivityLoginBinding
 import co.table.agent.android.jetpack.lifecycle.ApiLifeCycle
 import co.table.agent.android.network.API
 import co.table.agent.android.network.ApiResponseInterface
-import com.crashlytics.android.Crashlytics
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
@@ -87,7 +86,7 @@ class LoginActivity : AppCompatActivity(), ApiResponseInterface {
                 Common.showProgressDialog(this)
                 loginDataViewModel.login(params, API.LOGIN, this)
             }.addOnFailureListener {
-                Crashlytics.log(Log.ERROR, "Firebase Token Failure", it.message)
+//                Crashlytics.log(Log.ERROR, "Firebase Token Failure", it.message)
                 loginDataViewModel.login(params, API.LOGIN, this)
             }
         }
@@ -144,7 +143,7 @@ class LoginActivity : AppCompatActivity(), ApiResponseInterface {
                 loginDataViewModel.googleSignIn(params, API.GOOGLE_SIGNIN, this)
 
             }.addOnFailureListener {
-                Crashlytics.log(Log.ERROR, "Firebase Token Failure", it.message)
+//                Crashlytics.log(Log.ERROR, "Firebase Token Failure", it.message)
                 loginDataViewModel.googleSignIn(params, API.GOOGLE_SIGNIN, this)
             }
 

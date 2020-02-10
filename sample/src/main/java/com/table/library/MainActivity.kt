@@ -1,19 +1,38 @@
 package com.table.library
 
-import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
-import co.table.agent.android.workspace.WorkSpaceActivity
+import co.table.agent.android.config.TBLUserAttributes
+import co.table.agent.android.config.TableLoginCallback
+import co.table.agent.android.config.TableSDK
+import co.table.agent.android.constans.Common
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), TableLoginCallback {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        TableSDK.init("https://develop3.dev.table.co","asasasas","asas")
+        var tableParams = TBLUserAttributes()
+        tableParams.email = "felixthomas727@gmail.com"
+        tableParams.firstName = "Felix"
+        tableParams.lastName = "Thomas"
+        Common.showProgressDialog(this)
+        TableSDK.registerUser("asas","aas",tableParams,this)
     }
 
+
     fun onLaunch(view: View) {
-        startActivity(Intent(this,WorkSpaceActivity::class.java))
+        TableSDK.showConversationList(this)
     }
+
+    override fun onSuccessLogin() {
+        Common.dismissProgressDialog()
+    }
+
+    override fun onFailure(errorCode: Int) {
+        Common.dismissProgressDialog()
+    }
+
 }

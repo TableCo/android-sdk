@@ -1,5 +1,6 @@
 package co.table.agent.android.network
 
+import co.table.agent.android.config.TBLUserAttributes
 import co.table.agent.android.dashboard.HeaderResponseModel
 import co.table.agent.android.login.LoginRequest
 import co.table.agent.android.login.UserModel
@@ -26,4 +27,7 @@ interface ApiInterface {
 
     @POST(API.ADD_FCM_DEVICE_TOKEN)
     fun sendToken(@Body params: TokenRequestModel): Call<TokenResponseModel>
+
+    @POST(API.AUTH_USER)
+    fun register(@Body params: TBLUserAttributes): Call<UserModel>
 }

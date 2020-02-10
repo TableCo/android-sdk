@@ -4,10 +4,12 @@ import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 
 class UserModel {
-    var profile: Profile? = null
-    @SerializedName("token")
+    @SerializedName("user")
     @Expose
-    var token: String? = null
+    var profile: Profile? = null
+    /*@SerializedName("token")
+    @Expose
+    var token: String? = null*/
     @SerializedName("is_agent")
     @Expose
     var isAgent: Boolean? = null
@@ -68,4 +70,7 @@ class Profile {
     @SerializedName("avatar_url")
     @Expose
     var avatarUrl: String? = null
+    @SerializedName("token")
+    @Expose
+    var token: String? = null
 }
