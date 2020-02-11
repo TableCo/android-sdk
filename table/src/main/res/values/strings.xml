@@ -6,7 +6,7 @@
     <string name="sign_in">Sign In</string>
     <string name="email_address">Email Address</string>
     <string name="password">Password</string>
-    <string name="sign_with_google">Sign with Google</string>
+    <string name="sign_with_google">Sign in with Google</string>
     <string name="all_conversation">All Conversations</string>
     <string name="account_setting">Account Settings</string>
     <string name="login_description">The next-generation digital communications platform for companies to acquire, retain, and connect with their customers.</string>

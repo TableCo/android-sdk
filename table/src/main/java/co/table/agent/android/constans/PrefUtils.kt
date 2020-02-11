@@ -5,7 +5,7 @@ import android.content.SharedPreferences
 import co.table.agent.android.login.UserModel
 import com.google.gson.Gson
 
-class PrefUtils {
+internal class PrefUtils {
     companion object {
         @Throws(ClassCastException::class)
         fun getString(
