@@ -178,7 +178,7 @@ class DashboardActivity : AppCompatActivity(), ApiResponseInterface {
 
     fun writeData() {
         val keyToken = "authToken"
-        val tokenValue: String = TableApplication.getAppSession().currentUser()?.token!!
+        val tokenValue: String = TableApplication.getAppSession().currentUser()?.profile!!.token!!
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             webView.evaluateJavascript(

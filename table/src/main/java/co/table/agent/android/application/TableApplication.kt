@@ -37,7 +37,7 @@ class TableApplication : Application() {
             tokenRequestModel.fcm_device_token = token
             ApiClient().getRetrofitObject(
                 session!!.currentUser()!!.workspace,
-                session!!.currentUser()!!.token
+                session!!.currentUser()!!.profile!!.token
             ).sendToken(
                 tokenRequestModel
             ).enqueue(object : Callback,
