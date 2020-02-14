@@ -7,7 +7,7 @@
 
         <variable
             name="accountViewModel"
-            type="co.table.agent.android.account.AccountDataViewModel" />
+            type="co.table.sdk.android.account.AccountDataViewModel" />
     </data>
 
 
@@ -38,17 +38,28 @@
                     android:onClick="onBackClick"
                     android:src="@drawable/ic_back" />
 
-                <co.table.agent.android.views.CustomTextView
+                <co.table.sdk.android.views.CustomTextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerHorizontal="true"
                     android:layout_centerVertical="true"
                     android:text="@string/account_setting"
                     android:textSize="18sp"
+
                     android:textStyle="bold"
                     android:textColor="@color/colorBlack"
                     app:customFont="medium" />
+                <co.table.sdk.android.views.CustomTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:layout_centerVertical="true"
+                    android:text="@string/account_setting"
+                    android:textSize="18sp"
 
+                    android:textStyle="bold"
+                    android:textColor="@color/colorBlack"
+                    app:customFont="medium" />
 
             </RelativeLayout>
 
@@ -69,9 +80,30 @@
                     android:layout_height="match_parent"
                     android:background="@color/colorScreenBG"
                     android:orientation="vertical">
+                    <co.table.sdk.android.views.CustomTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerHorizontal="true"
+                        android:layout_centerVertical="true"
+                        android:text="@string/account_setting"
+                        android:textSize="18sp"
 
+                        android:textStyle="bold"
+                        android:textColor="@color/colorBlack"
+                        app:customFont="medium" />
+                    <co.table.sdk.android.views.CustomTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerHorizontal="true"
+                        android:layout_centerVertical="true"
+                        android:text="@string/account_setting"
+                        android:textSize="18sp"
+                        android:fontFamily="sans-serif-medium"
+                        android:textStyle="bold"
+                        android:textColor="@color/colorBlack"
+                        app:customFont="medium" />
 
-                    <co.table.agent.android.views.CustomTextView
+                    <co.table.sdk.android.views.CustomTextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="20dp"
@@ -81,7 +113,7 @@
                         app:customFont="regular" />
 
 
-                    <co.table.agent.android.views.CustomTextView
+                    <co.table.sdk.android.views.CustomTextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="10dp"
@@ -96,7 +128,7 @@
                         android:layout_marginTop="10dp"
                         android:background="@color/edtBorder" />
 
-                    <co.table.agent.android.views.CustomTextView
+                    <co.table.sdk.android.views.CustomTextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="20dp"
@@ -110,14 +142,14 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="10dp">
 
-                        <co.table.agent.android.views.CustomTextView
+                        <co.table.sdk.android.views.CustomTextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="@{accountViewModel.workSpaceName}"
                             android:textSize="18sp"
                             android:textColor="@color/colorText"
                             app:customFont="regular" />
-                        <co.table.agent.android.views.CustomTextView
+                        <co.table.sdk.android.views.CustomTextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_alignParentRight="true"
@@ -134,7 +166,7 @@
                         android:background="@color/edtBorder" />
 
 
-                    <co.table.agent.android.views.CustomTextView
+                    <co.table.sdk.android.views.CustomTextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="20dp"
@@ -143,7 +175,7 @@
                         android:textSize="18sp"
                         app:customFont="regular" />
 
-                    <co.table.agent.android.views.CustomTextView
+                    <co.table.sdk.android.views.CustomTextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="10dp"
@@ -163,7 +195,7 @@
 
             </ScrollView>
 
-            <co.table.agent.android.views.CustomTextView
+            <co.table.sdk.android.views.CustomTextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_alignParentBottom="true"

@@ -7,7 +7,7 @@
 
         <variable
             name="loginViewModel"
-            type="co.table.agent.android.login.LoginDataViewModel" />
+            type="co.table.sdk.android.login.LoginDataViewModel" />
     </data>
 
     <LinearLayout
@@ -44,7 +44,7 @@
                     android:layout_marginTop="50dp"
                     android:orientation="vertical">
 
-                    <co.table.agent.android.views.CustomTextView
+                    <co.table.sdk.android.views.CustomTextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentLeft="true"
@@ -53,7 +53,7 @@
                         android:textSize="18sp"
                         app:customFont="regular" />
 
-                    <co.table.agent.android.views.CustomTextView
+                    <co.table.sdk.android.views.CustomTextView
                         android:id="@+id/tvWorkspace"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -65,14 +65,14 @@
                         app:customFont="regular" />
                 </LinearLayout>
 
-                <co.table.agent.android.views.CustomInputTextLayout
+                <co.table.sdk.android.views.CustomInputTextLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
                     android:hint="@string/email_address"
                     app:customFont="regular">
 
-                    <co.table.agent.android.views.CustomEditText
+                    <co.table.sdk.android.views.CustomEditText
                         android:id="@+id/edtEmail"
                         android:layout_width="match_parent"
                         android:layout_height="45dp"
@@ -83,23 +83,23 @@
                         android:textColor="@color/colorBlack"
                         android:textColorHint="@color/colorHint"
                         app:customFont="regular" />
-                </co.table.agent.android.views.CustomInputTextLayout>
+                </co.table.sdk.android.views.CustomInputTextLayout>
 
-                <co.table.agent.android.views.CustomTextView
+                <co.table.sdk.android.views.CustomTextView
                     android:id="@+id/tvEmailError"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="@{loginViewModel.emailError}"
                     android:textColor="#FF0000" />
 
-                <co.table.agent.android.views.CustomInputTextLayout
+                <co.table.sdk.android.views.CustomInputTextLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
                     android:hint="@string/password"
                     app:customFont="regular">
 
-                    <co.table.agent.android.views.CustomEditText
+                    <co.table.sdk.android.views.CustomEditText
                         android:id="@+id/edtPassword"
                         android:layout_width="match_parent"
                         android:layout_height="45dp"
@@ -111,16 +111,16 @@
                         android:textColor="@color/colorBlack"
                         android:textColorHint="@color/colorHint"
                         app:customFont="regular" />
-                </co.table.agent.android.views.CustomInputTextLayout>
+                </co.table.sdk.android.views.CustomInputTextLayout>
 
-                <co.table.agent.android.views.CustomTextView
+                <co.table.sdk.android.views.CustomTextView
                     android:id="@+id/tvPasswordError"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="@{loginViewModel.passwordError}"
                     android:textColor="@color/colorRed" />
 
-                <co.table.agent.android.views.CustomButton
+                <co.table.sdk.android.views.CustomButton
                     android:id="@+id/btnSignIn"
                     android:layout_width="match_parent"
                     android:layout_height="45dp"
@@ -134,7 +134,7 @@
                     android:textStyle="bold"
                     app:customFont="bold" />
 
-                <co.table.agent.android.views.CustomTextView
+                <co.table.sdk.android.views.CustomTextView
                     android:id="@+id/tvServerError"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -154,7 +154,7 @@
                         android:layout_centerVertical="true"
                         android:background="@color/edtBorder" />
 
-                    <co.table.agent.android.views.CustomTextView
+                    <co.table.sdk.android.views.CustomTextView
                         android:layout_width="80dp"
                         android:layout_height="wrap_content"
                         android:layout_centerHorizontal="true"
@@ -175,7 +175,7 @@
                     android:onClick="onGoogleSignClick">
 
 
-                    <co.table.agent.android.views.CustomTextView
+                    <co.table.sdk.android.views.CustomTextView
                         android:id="@+id/tvGoogleSignin"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"

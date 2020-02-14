@@ -7,7 +7,7 @@
 
         <variable
             name="videoViewModel"
-            type="co.table.agent.android.chat.VideoViewModel" />
+            type="co.table.sdk.android.chat.VideoViewModel" />
     </data>
 
 
@@ -40,7 +40,7 @@
                     android:onClick="onBackClick"
                     android:src="@drawable/ic_back" />
 
-                <co.table.agent.android.views.CustomTextView
+                <co.table.sdk.android.views.CustomTextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerHorizontal="true"
@@ -106,7 +106,7 @@
                             android:layout_gravity="center"
                             android:src="@drawable/ic_switch_camera" />
 
-                        <co.table.agent.android.views.CustomTextView
+                        <co.table.sdk.android.views.CustomTextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
@@ -134,7 +134,7 @@
                             android:layout_gravity="center"
                             android:src="@drawable/ic_call_end" />
 
-                        <co.table.agent.android.views.CustomTextView
+                        <co.table.sdk.android.views.CustomTextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"

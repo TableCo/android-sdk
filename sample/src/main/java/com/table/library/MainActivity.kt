@@ -3,10 +3,10 @@ package com.table.library
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
-import co.table.agent.android.config.TBLUserAttributes
-import co.table.agent.android.config.TableLoginCallback
-import co.table.agent.android.config.TableSDK
-import co.table.agent.android.constans.Common
+import co.table.sdk.android.config.TBLUserAttributes
+import co.table.sdk.android.config.TableLoginCallback
+import co.table.sdk.TableSDK
+import co.table.sdk.android.constants.Common
 
 class MainActivity : AppCompatActivity(), TableLoginCallback {
 
@@ -14,7 +14,7 @@ class MainActivity : AppCompatActivity(), TableLoginCallback {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         TableSDK.init("https://develop3.dev.table.co","asasasas","asas")
-        var tableParams = TBLUserAttributes()
+        val tableParams = TBLUserAttributes()
         tableParams.email = "felixthomas727@gmail.com"
         tableParams.firstName = "Felix"
         tableParams.lastName = "Thomas"
@@ -24,6 +24,7 @@ class MainActivity : AppCompatActivity(), TableLoginCallback {
 
 
     fun onLaunch(view: View) {
+
         TableSDK.showConversationList(this)
     }
 

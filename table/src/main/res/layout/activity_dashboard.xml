@@ -7,7 +7,7 @@
 
         <variable
             name="dashboardViewModel"
-            type="co.table.agent.android.dashboard.DashboardDataViewModel" />
+            type="co.table.sdk.android.dashboard.DashboardDataViewModel" />
     </data>
 
 
@@ -38,7 +38,7 @@
                     android:onClick="onBackClick"
                     android:src="@drawable/ic_back" />
 
-                <co.table.agent.android.views.CustomTextView
+                <co.table.sdk.android.views.CustomTextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerHorizontal="true"

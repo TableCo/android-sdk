@@ -7,7 +7,7 @@
 
         <variable
             name="workspaceViewModel"
-            type="co.table.agent.android.workspace.WorkspaceDataViewModel" />
+            type="co.table.sdk.android.workspace.WorkspaceDataViewModel" />
     </data>
 
     <LinearLayout
@@ -37,7 +37,7 @@
                     android:layout_marginTop="60dp"
                     android:src="@drawable/ic_logo" />
 
-                <co.table.agent.android.views.CustomTextView
+                <co.table.sdk.android.views.CustomTextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:gravity="center"
@@ -45,14 +45,14 @@
                     android:text="@string/login_description"
                     app:customFont="regular" />
 
-                <co.table.agent.android.views.CustomInputTextLayout
+                <co.table.sdk.android.views.CustomInputTextLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="@string/workspace"
                     android:layout_marginTop="50dp"
                     app:customFont="regular">
 
-                    <co.table.agent.android.views.CustomEditText
+                    <co.table.sdk.android.views.CustomEditText
                         android:id="@+id/edtWorkspace"
                         android:layout_width="match_parent"
                         android:layout_height="45dp"
@@ -61,9 +61,9 @@
                         android:singleLine="true"
                         android:imeOptions="actionDone"
                         app:customFont="regular" />
-                </co.table.agent.android.views.CustomInputTextLayout>
+                </co.table.sdk.android.views.CustomInputTextLayout>
 
-                <co.table.agent.android.views.CustomButton
+                <co.table.sdk.android.views.CustomButton
                     android:layout_width="match_parent"
                     android:layout_height="45dp"
                     android:layout_marginTop="20dp"
