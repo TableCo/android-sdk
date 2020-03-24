@@ -97,7 +97,7 @@ internal class DashboardActivity : AppCompatActivity(), ApiResponseInterface {
                     }
 
                 } else {
-                    binding.ivBack.visibility = View.GONE
+                    binding.ivBack.visibility = View.VISIBLE
                     dashboardDataViewModel.headerTitle.value = getString(R.string.all_conversation)
                 }
             }
@@ -187,7 +187,11 @@ internal class DashboardActivity : AppCompatActivity(), ApiResponseInterface {
     }
 
     public fun onBackClick(view: View) {
-        onBackPressed()
+        if (webView.canGoBack()) {
+            webView.goBack()
+        } else {
+            super.onBackPressed()
+        }
     }
 
     fun writeData() {
