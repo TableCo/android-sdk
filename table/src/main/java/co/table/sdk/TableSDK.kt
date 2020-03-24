@@ -1,32 +1,51 @@
 package co.table.sdk
 
+import android.app.Application
 import android.content.Context
 import android.content.Intent
 import android.text.TextUtils
-import co.table.sdk.android.application.TableApplication
 import co.table.sdk.android.config.*
 import co.table.sdk.android.config.TableAuthentication
 import co.table.sdk.android.dashboard.DashboardActivity
-import co.table.sdk.android.login.UserModel
+import co.table.sdk.android.login.RegisterResponseModel
 import co.table.sdk.android.network.API
 import co.table.sdk.android.network.ApiClient
+import co.table.sdk.android.session.ActivityLifecycleWatcher
+import co.table.sdk.android.session.AppSession
+import co.table.sdk.android.session.Session
 import retrofit2.Call
 import retrofit2.Response
 import javax.security.auth.callback.Callback
 
-class TableSDK {
+class TableSDK private constructor() {
+
     companion object {
         private var isDefaultLauncher: Boolean = false
-        private var tableAuthentication: TableAuthentication =
-            TableAuthentication()
+        private var tableAuthentication: TableAuthentication = TableAuthentication()
+        private val activityLifecycleWatcher = ActivityLifecycleWatcher()
+        private var initialApplicationContext: Context? = null;
+        internal val appSession: AppSession = Session()
+
         internal fun getTableData(): TableAuthentication {
             return tableAuthentication
         }
 
-        fun init(workspaceUrl: String, apiKey: String, userHash: String) {
+        // Get the Application Context from the currently shown activity if available, otherwise remember the one we were initialised with
+        internal val applicationContext: Context? get() {
+            return if (activityLifecycleWatcher.currentActivity?.applicationContext != null) {
+                activityLifecycleWatcher.currentActivity?.applicationContext
+            } else {
+                initialApplicationContext
+            }
+        }
+
+        //TODO: Move user hash into the register user methods
+        fun init(application: Application, workspaceUrl: String, apiKey: String, userHash: String) {
             tableAuthentication.workspaceUrl = workspaceUrl
             tableAuthentication.apiKey = apiKey
             tableAuthentication.userHashMAC = userHash
+            initialApplicationContext = application.applicationContext
+            application.registerActivityLifecycleCallbacks(activityLifecycleWatcher)
         }
 
         fun registerUser(userID: String) {
@@ -45,6 +64,7 @@ class TableSDK {
             userAttributes.apiKey = tableAuthentication.apiKey
             userAttributes.userHash = tableAuthentication.userHashMAC
             tableAuthentication.userAttributes = userAttributes
+
             if (TextUtils.isEmpty(tableAuthentication.workspaceUrl)) {
                 tableLoginCallback.onFailure(TABLE_ERROR_NO_WORKSPACE_ADDED)
             } else if (TextUtils.isEmpty(tableAuthentication.apiKey)) {
@@ -60,7 +80,7 @@ class TableSDK {
             } else if (TextUtils.isEmpty(tableAuthentication.userAttributes.email)) {
                 tableLoginCallback.onFailure(TABLE_ERROR_EMAIL_EMPTY)
             } else {
-                if (TableApplication.getAppSession().isAuthenticated()){
+                if (appSession.isAuthenticated()){
                     tableLoginCallback.onFailure(TABLE_ERROR_ALL_READY_REGISTERED)
                 }else{
                     register(
@@ -88,13 +108,13 @@ class TableSDK {
         }
 
         fun showConversationList(context: Context) {
-            if (TableApplication.getAppSession().isAuthenticated()){
+            if (appSession.isAuthenticated()){
                 context.startActivity(Intent(context,DashboardActivity::class.java))
             }
         }
 
         fun logout() {
-            TableApplication.getAppSession().logout()
+            appSession.logout()
         }
 
         private fun register(
@@ -104,23 +124,27 @@ class TableSDK {
         ) {
             ApiClient().getRetrofitObject(tableAuthentication.workspaceUrl, null).register(params)
                 .enqueue(object : Callback,
-                    retrofit2.Callback<UserModel> {
-                    override fun onFailure(call: Call<UserModel>, t: Throwable) {
+                    retrofit2.Callback<RegisterResponseModel> {
+                    override fun onFailure(call: Call<RegisterResponseModel>, t: Throwable) {
                         tableLoginCallback.onFailure(TABLE_ERROR_NETWORK_FAILURE)
                     }
 
-                    override fun onResponse(call: Call<UserModel>, response: Response<UserModel>) {
-                        if (response.code() == 200) {
-                            val user = response.body()!!
-                            user.workspace = tableAuthentication.workspaceUrl
-                            TableApplication.getAppSession().saveSession(user)
-                            tableLoginCallback.onSuccessLogin()
+                    override fun onResponse(call: Call<RegisterResponseModel>, responseModel: Response<RegisterResponseModel>) {
+                        if (responseModel.code() == 200) {
+                            val registerResponse = responseModel.body()!!
+                            registerResponse.user?.let {
+                                it.workspace = tableAuthentication.workspaceUrl
+                                appSession.saveSession(it)
+                                tableLoginCallback.onSuccessLogin()
+                            }
                         } else {
                             tableLoginCallback.onFailure(TABLE_ERROR_NETWORK_FAILURE)
                         }
                     }
                 })
         }
+
+
     }
 
 }

@@ -1,4 +1,4 @@
-package co.table.sdk.android.application
+package co.table.sdk.android.session
 
 import co.table.sdk.android.login.UserModel
 

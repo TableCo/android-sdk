@@ -13,7 +13,6 @@ class MainActivity : AppCompatActivity(), TableLoginCallback {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        TableSDK.init("https://develop3.dev.table.co","asasasas","asas")
         val tableParams = TBLUserAttributes()
         tableParams.email = "felixthomas727@gmail.com"
         tableParams.firstName = "Felix"

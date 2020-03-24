@@ -12,8 +12,8 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProviders
+import co.table.sdk.TableSDK
 import co.table.sdk.android.R
-import co.table.sdk.android.application.TableApplication
 import co.table.sdk.android.constants.Common
 import co.table.sdk.android.constants.Constants
 import co.table.sdk.android.databinding.ActivityVideoBinding
@@ -48,7 +48,7 @@ internal class VideoActivity : AppCompatActivity(), ApiResponseInterface, Sessio
         ApiLifeCycle(this, this, viewModel)
         binding.videoViewModel = viewModel
         binding.lifecycleOwner = this
-        viewModel.userModel.value = TableApplication.getAppSession().currentUser()
+        viewModel.userModel.value = TableSDK.appSession.currentUser()
         viewModel.getApiKey(API.GET_API_KEY, this)
         checkPermission()
 

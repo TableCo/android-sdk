@@ -6,8 +6,8 @@ import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProviders
+import co.table.sdk.TableSDK
 import co.table.sdk.android.R
-import co.table.sdk.android.application.TableApplication
 import co.table.sdk.android.constants.Common
 import co.table.sdk.android.constants.Constants
 import co.table.sdk.android.dashboard.DashboardActivity
@@ -155,7 +155,7 @@ internal class LoginActivity : AppCompatActivity(), ApiResponseInterface {
         Common.dismissProgressDialog()
         if (successResponse is UserModel) {
             successResponse.workspace = loginDataViewModel.validWorkSpace()
-            TableApplication.getAppSession().saveSession(successResponse)
+            TableSDK.appSession.saveSession(successResponse)
             goToNext()
         }
     }

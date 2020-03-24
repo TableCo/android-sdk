@@ -1,6 +1,5 @@
 package co.table.sdk.android.dashboard
 
-import co.table.sdk.android.login.Profile
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 
@@ -75,9 +74,9 @@ internal class Member{
     @SerializedName("is_owner")
     @Expose
     var isOwner: Boolean? = null
-    @SerializedName("profile")
-    @Expose
-    var profile: Profile? = null
+//    @SerializedName("profile")
+//    @Expose
+//    var profile: Profile? = null
 }
 internal class Properties{
     @SerializedName("list_id")

@@ -8,9 +8,9 @@ import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProviders
+import co.table.sdk.TableSDK
 import co.table.sdk.android.BuildConfig
 import co.table.sdk.android.R
-import co.table.sdk.android.application.TableApplication
 import co.table.sdk.android.constants.Common
 import co.table.sdk.android.constants.Constants
 import co.table.sdk.android.dashboard.DashboardActivity
@@ -25,7 +25,7 @@ class WorkSpaceActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        if (TableApplication.getAppSession().isAuthenticated()) {
+        if (TableSDK.appSession.isAuthenticated()) {
             var intent = Intent(this, DashboardActivity::class.java)
             intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
             startActivity(intent)

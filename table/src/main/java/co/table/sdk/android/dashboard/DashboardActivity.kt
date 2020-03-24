@@ -11,10 +11,8 @@ import android.webkit.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProviders
+import co.table.sdk.TableSDK
 import co.table.sdk.android.R
-import co.table.sdk.android.account.AccountSettingActivity
-import co.table.sdk.android.account.ConversationSettingActivity
-import co.table.sdk.android.application.TableApplication
 import co.table.sdk.android.chat.VideoActivity
 import co.table.sdk.android.constants.Constants
 import co.table.sdk.android.databinding.ActivityDashboardBinding
@@ -43,8 +41,18 @@ internal class DashboardActivity : AppCompatActivity(), ApiResponseInterface {
         setSupportActionBar(toolbar)
         initWebView()
         dashboardDataViewModel.headerTitle.value = getString(R.string.all_conversation)
+    }
 
+    private fun conversationIdFromUrl(urlString: String): String? {
+        val url = Uri.parse(urlString) ?: return null
+        val path = url.path ?: return null
+        val lastSegment = url.pathSegments.last()
 
+        return if (path.contains("/conversation/") && lastSegment.length == 36) {
+            lastSegment
+        } else {
+            null
+        }
     }
 
     private fun initWebView() {
@@ -61,7 +69,11 @@ internal class DashboardActivity : AppCompatActivity(), ApiResponseInterface {
         webView.webViewClient = object : WebViewClient() {
             override fun onPageFinished(view: WebView?, url: String?) {
                 super.onPageFinished(view, url)
-                view!!.loadUrl("javascript:window.android.onUrlChange(window.location.href);")
+
+                if (view != null && url != null && url.isNotEmpty()) {
+                    view.loadUrl("javascript:window.android.onUrlChange(window.location.href);")
+                }
+
                 progressBar.visibility = View.GONE
             }
 
@@ -70,18 +82,20 @@ internal class DashboardActivity : AppCompatActivity(), ApiResponseInterface {
                 super.doUpdateVisitedHistory(view, url, isReload)
                 if (view!!.canGoBack()) {
                     binding.ivBack.visibility = View.VISIBLE
-                    var uri = url?.replace("table/", "table?tableId=")
-                    var mainUri = Uri.parse(uri)
-                    var tableId = mainUri.getQueryParameter("tableId")
-                    if (tableId!!.contains("/")) {
-                        tableId = tableId.split("/")[0]
+
+                    // https://develop3.dev.table.co/conversation/c34ed657-341b-4be2-a08a-4e575b363b7e
+
+                    if (url != null && url.isNotEmpty()) {
+                        conversationIdFromUrl(url)?.let {
+                            this@DashboardActivity.tableId = it
+                            dashboardDataViewModel.getHeader(
+                                    it,
+                                    API.GET_HEADER,
+                                    this@DashboardActivity
+                            )
+                        }
                     }
-                    this@DashboardActivity.tableId = tableId
-                    dashboardDataViewModel.getHeader(
-                        tableId,
-                        API.GET_HEADER,
-                        this@DashboardActivity
-                    )
+
                 } else {
                     binding.ivBack.visibility = View.GONE
                     dashboardDataViewModel.headerTitle.value = getString(R.string.all_conversation)
@@ -178,30 +192,31 @@ internal class DashboardActivity : AppCompatActivity(), ApiResponseInterface {
 
     fun writeData() {
         val keyToken = "authToken"
-        val tokenValue: String = TableApplication.getAppSession().currentUser()?.profile!!.token!!
+        val currentUser = TableSDK.appSession.currentUser()
+        val tokenValue: String = currentUser!!.token!!
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             webView.evaluateJavascript(
                 "window.localStorage.setItem('$keyToken','$tokenValue');",
                 {
-                    webView.loadUrl(TableApplication.getAppSession().currentUser()?.workspace + "/table?webview=android&token=" + tokenValue)
+                    webView.loadUrl(TableSDK.appSession.currentUser()?.workspace + "/table?webview=android&token=" + tokenValue)
                 }
             )
         } else {
             webView.loadUrl("javascript:localStorage.setItem('$keyToken','$tokenValue');")
-            webView.loadUrl(TableApplication.getAppSession().currentUser()?.workspace + "/table?webview=android&token=" + tokenValue)
+            webView.loadUrl(TableSDK.appSession.currentUser()?.workspace + "/table?webview=android&token=" + tokenValue)
         }
     }
 
     fun onSettingClick(view: View) {
-        if (webView!!.canGoBack()) {
-            var intent = Intent(this, ConversationSettingActivity::class.java)
-            intent.putExtra(Constants.B_TABLE_ID, tableId)
-            startActivity(intent)
-        } else {
-            var intent = Intent(this, AccountSettingActivity::class.java)
-            startActivity(intent)
-        }
+//        if (webView!!.canGoBack()) {
+//            var intent = Intent(this, ConversationSettingActivity::class.java)
+//            intent.putExtra(Constants.B_TABLE_ID, tableId)
+//            startActivity(intent)
+//        } else {
+//            var intent = Intent(this, AccountSettingActivity::class.java)
+//            startActivity(intent)
+//        }
     }
 
     override fun onSuccess(successResponse: Any?, apiTag: String) {

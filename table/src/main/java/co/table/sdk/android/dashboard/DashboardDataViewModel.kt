@@ -1,8 +1,9 @@
 package co.table.sdk.android.dashboard
 
 import androidx.lifecycle.MutableLiveData
-import co.table.sdk.android.application.TableApplication
+import co.table.sdk.TableSDK
 import co.table.sdk.android.jetpack.viewmodel.ObservableViewModel
+import co.table.sdk.android.network.API
 import co.table.sdk.android.network.ApiClient
 import co.table.sdk.android.network.ApiResponseInterface
 import retrofit2.Call
@@ -15,27 +16,34 @@ internal class DashboardDataViewModel : ObservableViewModel() {
     var headerTitle = MutableLiveData<String>()
 
     fun getHeader(tableId: String, apiTag: String, responseInterface: ApiResponseInterface) {
-        ApiClient().getRetrofitObject(
-            TableApplication.getAppSession().currentUser()?.workspace,
-            null
-        ).getHeader(tableId).enqueue(object : Callback,
-            retrofit2.Callback<HeaderResponseModel> {
-            override fun onFailure(call: Call<HeaderResponseModel>, t: Throwable) {
-                responseInterface.onFailureRetrofit(t.localizedMessage, apiTag)
-            }
+        val workspace = TableSDK.appSession.currentUser()?.workspace
+        val token = TableSDK.appSession.currentUser()?.token
 
-            override fun onResponse(
-                call: Call<HeaderResponseModel>,
-                response: Response<HeaderResponseModel>
-            ) {
-                if (response.code() == 200) {
-                    headerResponseModel.value = response.body()
-                    headerTitle.value = headerResponseModel.value?.title
-                    responseInterface.onSuccess(response.body(), apiTag)
-                } else {
-                    responseInterface.onFailureDueToServer("", apiTag)
-                }
-            }
-        })
+        if (workspace == null || token == null) {
+            responseInterface.onFailureRetrofit("No workspace or token", API.GET_HEADER)
+            return
+        }
+
+        ApiClient().getRetrofitObject(workspace, token)
+                .getHeader(tableId)
+                .enqueue(object : Callback,
+                    retrofit2.Callback<HeaderResponseModel> {
+                        override fun onFailure(call: Call<HeaderResponseModel>, t: Throwable) {
+                            responseInterface.onFailureRetrofit(t.localizedMessage, apiTag)
+                        }
+
+                        override fun onResponse(
+                                call: Call<HeaderResponseModel>,
+                                response: Response<HeaderResponseModel>
+                        ) {
+                            if (response.code() == 200) {
+                                headerResponseModel.value = response.body()
+                                headerTitle.value = headerResponseModel.value?.title
+                                responseInterface.onSuccess(response.body(), apiTag)
+                            } else {
+                                responseInterface.onFailureDueToServer("", apiTag)
+                            }
+                        }
+                    })
     }
 }

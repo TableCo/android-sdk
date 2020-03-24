@@ -1,7 +1,7 @@
 package co.table.sdk.android.chat
 
 import androidx.lifecycle.MutableLiveData
-import co.table.sdk.android.application.TableApplication
+import co.table.sdk.TableSDK
 import co.table.sdk.android.jetpack.viewmodel.ObservableViewModel
 import co.table.sdk.android.login.UserModel
 import co.table.sdk.android.network.ApiClient
@@ -15,7 +15,7 @@ internal class VideoViewModel : ObservableViewModel() {
     var apiKey = MutableLiveData<Int>()
     fun getApiKey(apiTag: String, responseInterface: ApiResponseInterface) {
         ApiClient().getRetrofitObject(
-            TableApplication.getAppSession().currentUser()?.workspace,
+                TableSDK.appSession.currentUser()?.workspace,
             null
         ).getApiKey().enqueue(object : Callback,
             retrofit2.Callback<Any> {
