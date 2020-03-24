@@ -186,7 +186,7 @@ internal class DashboardActivity : AppCompatActivity(), ApiResponseInterface {
         }
     }
 
-    public fun onBackClick(view: View) {
+    fun onBackClick(view: View) {
         if (webView.canGoBack()) {
             webView.goBack()
         } else {

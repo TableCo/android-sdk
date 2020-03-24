@@ -95,7 +95,7 @@ internal class VideoActivity : AppCompatActivity(), ApiResponseInterface, Sessio
             return
         }
 
-        mSession = Session.Builder(this, "" + viewModel.apiKey.value, sessionId).build()
+        mSession = Session.Builder(this, viewModel.apiKey.value, sessionId).build()
         mSession!!.setSessionListener(this)
         mSession!!.setReconnectionListener(this)
         mSession!!.connect(token)
@@ -218,7 +218,7 @@ internal class VideoActivity : AppCompatActivity(), ApiResponseInterface, Sessio
         if (mPublisher!!.getView() is GLSurfaceView) {
             (mPublisher!!.getView() as GLSurfaceView).setZOrderOnTop(true)
         }
-        Log.i("Session Connected", p0?.sessionId)
+        Log.i("Session Connected", p0?.sessionId ?: "no session")
         mSession!!.publish(mPublisher)
     }
 
@@ -235,7 +235,7 @@ internal class VideoActivity : AppCompatActivity(), ApiResponseInterface, Sessio
     }
 
     override fun onError(p0: Session?, p1: OpentokError?) {
-        Log.i("Session Error", p1?.message)
+        Log.i("Session Error", p1?.message ?: "no message")
 //        Crashlytics.log(Log.ERROR,"Session",p1?.message)
     }
 

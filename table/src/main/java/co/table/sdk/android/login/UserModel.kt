@@ -15,7 +15,7 @@ internal class UserModel {
 //    var profile: Profile? = null
     @SerializedName("token")
     @Expose
-    var token: String? = null   //// <<<<<<<<< token
+    var token: String? = null
     @SerializedName("is_agent")
     @Expose
     var isAgent: Boolean? = null

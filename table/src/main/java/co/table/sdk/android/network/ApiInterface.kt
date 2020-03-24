@@ -5,6 +5,7 @@ import co.table.sdk.android.dashboard.HeaderResponseModel
 import co.table.sdk.android.login.LoginRequest
 import co.table.sdk.android.login.RegisterResponseModel
 import co.table.sdk.android.login.UserModel
+import co.table.sdk.android.network.models.ApiKeyResponseModel
 import co.table.sdk.android.network.models.TokenRequestModel
 import co.table.sdk.android.network.models.TokenResponseModel
 import retrofit2.Call
@@ -24,7 +25,7 @@ internal interface ApiInterface {
     fun getHeader(@Path("tableId") tableId: String): Call<HeaderResponseModel>
 
     @GET(API.GET_API_KEY)
-    fun getApiKey(): Call<Any>
+    fun getApiKey(): Call<ApiKeyResponseModel>
 
     @POST(API.ADD_FCM_DEVICE_TOKEN)
     fun sendToken(@Body params: TokenRequestModel): Call<TokenResponseModel>
