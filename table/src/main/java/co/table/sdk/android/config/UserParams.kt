@@ -4,7 +4,8 @@ import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 import java.util.*
 
-class TBLUserAttributes {
+//TODO: Split this up so that there's a user-facing and internal serialised side
+class UserParams {
     @SerializedName("user_id")
     @Expose
     internal var userId: String? = ""
@@ -26,6 +27,5 @@ class TBLUserAttributes {
     @SerializedName("custom_attributes")
     @Expose
     var custom_attributes: HashMap<String, Any> = HashMap()
-
 
 }

@@ -1,6 +1,6 @@
 package co.table.sdk.android.network
 
-import co.table.sdk.android.config.TBLUserAttributes
+import co.table.sdk.android.config.UserParams
 import co.table.sdk.android.dashboard.HeaderResponseModel
 import co.table.sdk.android.login.LoginRequest
 import co.table.sdk.android.login.RegisterResponseModel
@@ -31,5 +31,5 @@ internal interface ApiInterface {
     fun sendToken(@Body params: TokenRequestModel): Call<TokenResponseModel>
 
     @POST(API.AUTH_USER)
-    fun register(@Body params: TBLUserAttributes): Call<RegisterResponseModel>
+    fun register(@Body params: UserParams): Call<RegisterResponseModel>
 }

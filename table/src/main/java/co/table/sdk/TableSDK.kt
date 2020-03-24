@@ -40,67 +40,42 @@ class TableSDK private constructor() {
         }
 
         //TODO: Move user hash into the register user methods
-        fun init(application: Application, workspaceUrl: String, apiKey: String, userHash: String) {
+        fun init(application: Application, workspaceUrl: String, apiKey: String) {
             tableAuthentication.workspaceUrl = workspaceUrl
             tableAuthentication.apiKey = apiKey
-            tableAuthentication.userHashMAC = userHash
             initialApplicationContext = application.applicationContext
             application.registerActivityLifecycleCallbacks(activityLifecycleWatcher)
         }
 
         fun registerUser(userID: String) {
-            tableAuthentication.userID = userID
+            registerUser(userID, UserParams(), null)
         }
 
-        fun registerUser(userID: String, userHash: String) {
+        fun registerUser(userID: String, userParams: UserParams, tableLoginCallback: TableLoginCallback?) {
             tableAuthentication.userID = userID
-            tableAuthentication.userHashMAC = userHash
-        }
-
-        fun registerUser(userID: String, userHash: String, userAttributes: TBLUserAttributes, tableLoginCallback: TableLoginCallback) {
-            tableAuthentication.userID = userID
-            tableAuthentication.userHashMAC = userHash
-            userAttributes.userId = userID
-            userAttributes.apiKey = tableAuthentication.apiKey
-            userAttributes.userHash = tableAuthentication.userHashMAC
-            tableAuthentication.userAttributes = userAttributes
+            userParams.userId = userID
+            userParams.apiKey = tableAuthentication.apiKey
+            tableAuthentication.userParams = userParams
 
             if (TextUtils.isEmpty(tableAuthentication.workspaceUrl)) {
-                tableLoginCallback.onFailure(TABLE_ERROR_NO_WORKSPACE_ADDED)
+                tableLoginCallback?.onFailure(TABLE_ERROR_NO_WORKSPACE_ADDED)
             } else if (TextUtils.isEmpty(tableAuthentication.apiKey)) {
-                tableLoginCallback.onFailure(TABLE_ERROR_API_KEY_EMPTY)
-            } else if (TextUtils.isEmpty(tableAuthentication.userHashMAC)) {
-                tableLoginCallback.onFailure(TABLE_ERROR_HASH_MAC_EMPTY)
+                tableLoginCallback?.onFailure(TABLE_ERROR_API_KEY_EMPTY)
             } else if (TextUtils.isEmpty(tableAuthentication.userID)) {
-                tableLoginCallback.onFailure(TABLE_ERROR_USER_ID_EMPTY)
-            } else if (TextUtils.isEmpty(tableAuthentication.userAttributes.firstName)) {
-                tableLoginCallback.onFailure(TABLE_ERROR_FIRST_NAME_EMPTY)
-            } else if (TextUtils.isEmpty(tableAuthentication.userAttributes.lastName)) {
-                tableLoginCallback.onFailure(TABLE_ERROR_LAST_NAME_EMPTY)
-            } else if (TextUtils.isEmpty(tableAuthentication.userAttributes.email)) {
-                tableLoginCallback.onFailure(TABLE_ERROR_EMAIL_EMPTY)
+                tableLoginCallback?.onFailure(TABLE_ERROR_USER_ID_EMPTY)
+            } else if (TextUtils.isEmpty(tableAuthentication.userParams.firstName)) {
+                tableLoginCallback?.onFailure(TABLE_ERROR_FIRST_NAME_EMPTY)
+            } else if (TextUtils.isEmpty(tableAuthentication.userParams.lastName)) {
+                tableLoginCallback?.onFailure(TABLE_ERROR_LAST_NAME_EMPTY)
+            } else if (TextUtils.isEmpty(tableAuthentication.userParams.email)) {
+                tableLoginCallback?.onFailure(TABLE_ERROR_EMAIL_EMPTY)
             } else {
-                if (appSession.isAuthenticated()){
-                    tableLoginCallback.onFailure(TABLE_ERROR_ALL_READY_REGISTERED)
-                }else{
-                    register(
-                        getTableData().userAttributes,
-                        API.AUTH_USER,
-                        tableLoginCallback
-                    )
-                }
+                register(getTableData().userParams, tableLoginCallback)
             }
         }
 
-        fun updateUser(userAttributes: TBLUserAttributes) {
-            userAttributes.userId = tableAuthentication.userID
-            userAttributes.apiKey = tableAuthentication.apiKey
-            userAttributes.userHash = tableAuthentication.userHashMAC
-            tableAuthentication.userAttributes = userAttributes
-        }
-
-        fun registerUnidentifiedUser() {
-
+        fun registerUnidentifiedUser(userID: String) {
+            registerUser(userID)
         }
 
         fun useDefaultLauncher(isDefaultLauncher: Boolean) {
@@ -117,16 +92,12 @@ class TableSDK private constructor() {
             appSession.logout()
         }
 
-        private fun register(
-            params: TBLUserAttributes,
-            apiTag: String,
-            tableLoginCallback: TableLoginCallback
-        ) {
+        private fun register(params: UserParams, tableLoginCallback: TableLoginCallback?) {
             ApiClient().getRetrofitObject(tableAuthentication.workspaceUrl, null).register(params)
                 .enqueue(object : Callback,
                     retrofit2.Callback<RegisterResponseModel> {
                     override fun onFailure(call: Call<RegisterResponseModel>, t: Throwable) {
-                        tableLoginCallback.onFailure(TABLE_ERROR_NETWORK_FAILURE)
+                        tableLoginCallback?.onFailure(TABLE_ERROR_NETWORK_FAILURE)
                     }
 
                     override fun onResponse(call: Call<RegisterResponseModel>, responseModel: Response<RegisterResponseModel>) {
@@ -135,10 +106,10 @@ class TableSDK private constructor() {
                             registerResponse.user?.let {
                                 it.workspace = tableAuthentication.workspaceUrl
                                 appSession.saveSession(it)
-                                tableLoginCallback.onSuccessLogin()
+                                tableLoginCallback?.onSuccessLogin()
                             }
                         } else {
-                            tableLoginCallback.onFailure(TABLE_ERROR_NETWORK_FAILURE)
+                            tableLoginCallback?.onFailure(TABLE_ERROR_NETWORK_FAILURE)
                         }
                     }
                 })
