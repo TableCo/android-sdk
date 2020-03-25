@@ -6,6 +6,7 @@ import co.table.sdk.android.login.LoginRequest
 import co.table.sdk.android.login.RegisterResponseModel
 import co.table.sdk.android.login.UserModel
 import co.table.sdk.android.network.models.ApiKeyResponseModel
+import co.table.sdk.android.network.models.CreateConversationResponseModel
 import co.table.sdk.android.network.models.TokenRequestModel
 import co.table.sdk.android.network.models.TokenResponseModel
 import retrofit2.Call
@@ -15,6 +16,7 @@ import retrofit2.http.POST
 import retrofit2.http.Path
 
 internal interface ApiInterface {
+
     @POST(API.LOGIN)
     fun login(@Body params: LoginRequest): Call<UserModel>
 
@@ -32,4 +34,8 @@ internal interface ApiInterface {
 
     @POST(API.AUTH_USER)
     fun register(@Body params: UserParams): Call<RegisterResponseModel>
+
+    @POST(API.CREATE_CONVERSATION)
+    fun createConversation(@Body blankObject: Map<String, String>): Call<CreateConversationResponseModel>
+
 }

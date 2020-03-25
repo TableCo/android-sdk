@@ -8,17 +8,20 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.webkit.*
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProviders
 import co.table.sdk.TableSDK
 import co.table.sdk.android.R
 import co.table.sdk.android.chat.VideoActivity
+import co.table.sdk.android.constants.Common
 import co.table.sdk.android.constants.Constants
 import co.table.sdk.android.databinding.ActivityDashboardBinding
 import co.table.sdk.android.jetpack.lifecycle.ApiLifeCycle
 import co.table.sdk.android.network.API
 import co.table.sdk.android.network.ApiResponseInterface
+import co.table.sdk.android.network.models.CreateConversationResponseModel
 import kotlinx.android.synthetic.main.activity_dashboard.*
 
 //TODO: New message button
@@ -27,7 +30,7 @@ internal class DashboardActivity : AppCompatActivity(), ApiResponseInterface {
     private var tableId = ""
     lateinit var binding: ActivityDashboardBinding
     lateinit var dashboardDataViewModel: DashboardDataViewModel
-    var webViewfileCallback: ValueCallback<Array<Uri>>? = null
+    var webViewFileCallback: ValueCallback<Array<Uri>>? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -116,7 +119,7 @@ internal class DashboardActivity : AppCompatActivity(), ApiResponseInterface {
                 filePathCallback: ValueCallback<Array<Uri>>?,
                 fileChooserParams: FileChooserParams?
             ): Boolean {
-                webViewfileCallback = filePathCallback
+                webViewFileCallback = filePathCallback
                 val i = Intent(Intent.ACTION_GET_CONTENT)
                 i.addCategory(Intent.CATEGORY_OPENABLE)
                 i.type = "*/*"
@@ -150,11 +153,11 @@ internal class DashboardActivity : AppCompatActivity(), ApiResponseInterface {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == FILECHOOSER_RESULTCODE) {
-            if (null == webViewfileCallback) return
+            if (null == webViewFileCallback) return
             if (resultCode == Activity.RESULT_OK) {
                 if (data != null && data.data != null) {
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                        webViewfileCallback?.onReceiveValue(
+                        webViewFileCallback?.onReceiveValue(
                             WebChromeClient.FileChooserParams.parseResult(
                                 resultCode,
                                 data
@@ -162,19 +165,18 @@ internal class DashboardActivity : AppCompatActivity(), ApiResponseInterface {
                         )
                     } else {
                         var array = arrayOf<Uri>(data.data!!)
-                        webViewfileCallback?.onReceiveValue(array)
+                        webViewFileCallback?.onReceiveValue(array)
                     }
-                    webViewfileCallback = null
+                    webViewFileCallback = null
 
                 } else {
-                    webViewfileCallback?.onReceiveValue(null)
-                    webViewfileCallback = null
+                    webViewFileCallback?.onReceiveValue(null)
+                    webViewFileCallback = null
                 }
             } else {
-                webViewfileCallback?.onReceiveValue(null)
-                webViewfileCallback = null
+                webViewFileCallback?.onReceiveValue(null)
+                webViewFileCallback = null
             }
-
         }
     }
 
@@ -212,6 +214,11 @@ internal class DashboardActivity : AppCompatActivity(), ApiResponseInterface {
         }
     }
 
+    fun onNewMessage(view: View) {
+        Common.showProgressDialog(this)
+        dashboardDataViewModel.createConversation(this)
+    }
+
     fun onSettingClick(view: View) {
 //        if (webView!!.canGoBack()) {
 //            var intent = Intent(this, ConversationSettingActivity::class.java)
@@ -224,14 +231,45 @@ internal class DashboardActivity : AppCompatActivity(), ApiResponseInterface {
     }
 
     override fun onSuccess(successResponse: Any?, apiTag: String) {
-
+        when (apiTag) {
+            API.CREATE_CONVERSATION -> {
+                Common.dismissProgressDialog()
+                val conversationResponseModel = successResponse as? CreateConversationResponseModel
+                conversationResponseModel?.let {
+                    webView.loadUrl(TableSDK.appSession.currentUser()?.workspace + "/conversation/" + it.conversationId)
+                }
+            }
+        }
     }
 
     override fun onFailureDueToServer(errorMessage: Any?, apiTag: String) {
+        when (apiTag) {
+            API.CREATE_CONVERSATION -> {
+                Common.dismissProgressDialog()
+
+                val builder = AlertDialog.Builder(this)
+                builder.setTitle("Error")
+                builder.setMessage("Error creating new conversation ${errorMessage ?: ""}")
+                builder.setCancelable(true)
+                val dialog = builder.create()
+                dialog.show()
+            }
+        }
     }
 
     override fun onFailureRetrofit(message: String?, apiTag: String) {
+        when (apiTag) {
+            API.CREATE_CONVERSATION -> {
+                Common.dismissProgressDialog()
 
+                val builder = AlertDialog.Builder(this)
+                builder.setTitle("Error")
+                builder.setMessage("Error creating new conversation")
+                builder.setCancelable(true)
+                val dialog = builder.create()
+                dialog.show()
+            }
+        }
     }
 
     override fun logoutUser() {

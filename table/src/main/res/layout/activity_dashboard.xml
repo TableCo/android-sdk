@@ -55,8 +55,8 @@
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
                     android:layout_marginRight="20dp"
-                    android:onClick="onSettingClick"
-                    android:src="@drawable/ic_settings" />
+                    android:onClick="onNewMessage"
+                    android:src="@drawable/ic_add_comment_black" />
 
             </RelativeLayout>
         </androidx.appcompat.widget.Toolbar>

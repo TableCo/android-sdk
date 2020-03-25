@@ -6,6 +6,7 @@ import co.table.sdk.android.jetpack.viewmodel.ObservableViewModel
 import co.table.sdk.android.network.API
 import co.table.sdk.android.network.ApiClient
 import co.table.sdk.android.network.ApiResponseInterface
+import co.table.sdk.android.network.models.CreateConversationResponseModel
 import retrofit2.Call
 import retrofit2.Response
 import javax.security.auth.callback.Callback
@@ -45,5 +46,35 @@ internal class DashboardDataViewModel : ObservableViewModel() {
                             }
                         }
                     })
+    }
+
+    fun createConversation(responseInterface: ApiResponseInterface) {
+        val workspace = TableSDK.appSession.currentUser()?.workspace
+        val token = TableSDK.appSession.currentUser()?.token
+
+        if (workspace == null || token == null) {
+            responseInterface.onFailureRetrofit("No workspace or token", API.CREATE_CONVERSATION)
+            return
+        }
+
+        ApiClient().getRetrofitObject(workspace, token)
+                .createConversation(HashMap())
+                .enqueue(object : Callback,
+                        retrofit2.Callback<CreateConversationResponseModel> {
+                    override fun onFailure(call: Call<CreateConversationResponseModel>, t: Throwable) {
+                        responseInterface.onFailureRetrofit(t.localizedMessage, API.CREATE_CONVERSATION)
+                    }
+
+                    override fun onResponse(
+                            call: Call<CreateConversationResponseModel>,
+                            response: Response<CreateConversationResponseModel>
+                    ) {
+                        if (response.code() == 200) {
+                            responseInterface.onSuccess(response.body(), API.CREATE_CONVERSATION)
+                        } else {
+                            responseInterface.onFailureDueToServer(response.errorBody()?.string(), API.CREATE_CONVERSATION)
+                        }
+                    }
+                })
     }
 }

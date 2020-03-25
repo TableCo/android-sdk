@@ -7,5 +7,6 @@ object API {
     const val GET_HEADER = "/table-service/table/"
     const val GET_API_KEY = "/installation-service/installation/opentok-api-key"
     const val GET_GOOGLE_CLIENT_ID = "/installation-service/installation/google-client-id"
-    const val AUTH_USER= "/user-service/user/auth/chat-user"
+    const val AUTH_USER = "/user-service/user/auth/chat-user"
+    const val CREATE_CONVERSATION = "/table-service/table"
 }
