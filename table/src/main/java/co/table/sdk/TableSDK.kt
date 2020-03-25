@@ -17,6 +17,7 @@ import retrofit2.Call
 import retrofit2.Response
 import javax.security.auth.callback.Callback
 
+//TODO: Ensure everything is correctly exposed to Java
 class TableSDK private constructor() {
 
     companion object {
@@ -39,7 +40,6 @@ class TableSDK private constructor() {
             }
         }
 
-        //TODO: Move user hash into the register user methods
         fun init(application: Application, workspaceUrl: String, apiKey: String) {
             tableAuthentication.workspaceUrl = workspaceUrl
             tableAuthentication.apiKey = apiKey
@@ -47,11 +47,15 @@ class TableSDK private constructor() {
             application.registerActivityLifecycleCallbacks(activityLifecycleWatcher)
         }
 
-        fun registerUser(userID: String) {
-            registerUser(userID, UserParams(), null)
+        fun registerUnidentifiedUser(userID: String, tableLoginCallback: TableLoginCallback?) {
+            registerUser(userID, UserParams(), false, tableLoginCallback)
         }
 
         fun registerUser(userID: String, userParams: UserParams, tableLoginCallback: TableLoginCallback?) {
+            registerUser(userID, UserParams(), true, tableLoginCallback)
+        }
+
+        private fun registerUser(userID: String, userParams: UserParams, validateUserParams: Boolean, tableLoginCallback: TableLoginCallback?) {
             tableAuthentication.userID = userID
             userParams.userId = userID
             userParams.apiKey = tableAuthentication.apiKey
@@ -63,19 +67,15 @@ class TableSDK private constructor() {
                 tableLoginCallback?.onFailure(TABLE_ERROR_API_KEY_EMPTY)
             } else if (TextUtils.isEmpty(tableAuthentication.userID)) {
                 tableLoginCallback?.onFailure(TABLE_ERROR_USER_ID_EMPTY)
-            } else if (TextUtils.isEmpty(tableAuthentication.userParams.firstName)) {
+            } else if (validateUserParams && TextUtils.isEmpty(tableAuthentication.userParams.firstName)) {
                 tableLoginCallback?.onFailure(TABLE_ERROR_FIRST_NAME_EMPTY)
-            } else if (TextUtils.isEmpty(tableAuthentication.userParams.lastName)) {
+            } else if (validateUserParams && TextUtils.isEmpty(tableAuthentication.userParams.lastName)) {
                 tableLoginCallback?.onFailure(TABLE_ERROR_LAST_NAME_EMPTY)
-            } else if (TextUtils.isEmpty(tableAuthentication.userParams.email)) {
+            } else if (validateUserParams && TextUtils.isEmpty(tableAuthentication.userParams.email)) {
                 tableLoginCallback?.onFailure(TABLE_ERROR_EMAIL_EMPTY)
             } else {
                 register(getTableData().userParams, tableLoginCallback)
             }
-        }
-
-        fun registerUnidentifiedUser(userID: String) {
-            registerUser(userID)
         }
 
         fun useDefaultLauncher(isDefaultLauncher: Boolean) {
