@@ -9,9 +9,10 @@ import android.net.Uri
 import android.provider.Settings
 import android.view.inputmethod.InputMethodManager
 import co.table.sdk.android.R
+import co.table.sdk.android.config.*
 import java.util.regex.Pattern
 
-object Common {
+internal object Common {
     private var progressDialog: ProgressDialog? = null
 
     fun getTypeface(context: Context?, id: Int): Typeface {
@@ -59,7 +60,6 @@ object Common {
         } catch (e: Exception) {
             e.printStackTrace()
         }
-
     }
 
 
@@ -109,4 +109,19 @@ object Common {
         i.addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS)
         context.startActivity(i)
     }
+
+    fun errorMessageFromConstant(constant: Int): String {
+        return when (constant) {
+            TABLE_ERROR_NO_WORKSPACE_ADDED -> "No workspace URL supplied"
+            TABLE_ERROR_API_KEY_EMPTY -> "No API key supplied"
+            TABLE_ERROR_USER_ID_EMPTY -> "User ID not supplied"
+            TABLE_ERROR_FIRST_NAME_EMPTY -> "First name field is empty"
+            TABLE_ERROR_LAST_NAME_EMPTY -> "Last name field is empty"
+            TABLE_ERROR_EMAIL_EMPTY -> "Email address field is empty"
+            TABLE_ERROR_NETWORK_FAILURE -> "Network error"
+            TABLE_ERROR_ALL_READY_REGISTERED -> "User is already registered"
+            else -> "Unknown error"
+        }
+    }
+
 }

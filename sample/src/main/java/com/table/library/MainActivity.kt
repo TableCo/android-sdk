@@ -1,5 +1,7 @@
 package com.table.library
 
+import android.app.ProgressDialog
+import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
@@ -7,9 +9,10 @@ import androidx.appcompat.app.AlertDialog
 import co.table.sdk.android.config.UserParams
 import co.table.sdk.android.config.TableLoginCallback
 import co.table.sdk.TableSDK
-import co.table.sdk.android.constants.Common
+
 
 class MainActivity : AppCompatActivity(), TableLoginCallback {
+    private var progressDialog: ProgressDialog? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -22,35 +25,62 @@ class MainActivity : AppCompatActivity(), TableLoginCallback {
     }
 
     fun onRegisterUser(view: View) {
-        Common.showProgressDialog(this)
+        showProgressDialog(this)
 
         val tableParams = UserParams()
-        tableParams.email = "felixthomas727@gmail.com"
-        tableParams.firstName = "Felix"
-        tableParams.lastName = "Thomas"
+        tableParams.email = "email@gmail.com"
+        tableParams.firstName = "First"
+        tableParams.lastName = "Last"
 
-        TableSDK.registerUser("my_user_id", tableParams,this)
+        TableSDK.registerUser("my_user_id-2", tableParams,this)
     }
 
     fun onRegisterAnonymous(view: View) {
-        Common.showProgressDialog(this)
+        showProgressDialog(this)
         TableSDK.registerUnidentifiedUser("anonymous_user_id", this)
     }
 
     override fun onSuccessLogin() {
-        Common.dismissProgressDialog()
+        dismissProgressDialog()
     }
 
-    override fun onFailure(errorCode: Int) {
-        Common.dismissProgressDialog()
+    override fun onFailure(errorCode: Int, details: String) {
+        dismissProgressDialog()
 
         // Let the user know
         val builder = AlertDialog.Builder(this)
         builder.setTitle("Registration Error")
-        builder.setMessage("Error code $errorCode")
+        builder.setMessage("Error code $errorCode - $details")
         builder.setCancelable(true)
         val dialog = builder.create()
         dialog.show()
+    }
+
+
+    private fun showProgressDialog(context: Context) {
+        try {
+            if (progressDialog != null && progressDialog!!.isShowing) {
+                progressDialog!!.dismiss()
+            }
+            progressDialog = ProgressDialog(context)
+            progressDialog!!.setMessage(context.resources.getString(co.table.sdk.android.R.string.pls_wait))
+            progressDialog!!.setCancelable(false)
+            progressDialog!!.setCanceledOnTouchOutside(false)
+            progressDialog!!.show()
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+    }
+
+
+    private fun dismissProgressDialog() {
+        try {
+            if (progressDialog != null && progressDialog!!.isShowing) {
+                progressDialog!!.dismiss()
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
     }
 
 }

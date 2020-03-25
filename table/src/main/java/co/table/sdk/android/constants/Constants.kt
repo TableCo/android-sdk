@@ -1,6 +1,6 @@
 package co.table.sdk.android.constants
 
-object Constants {
+internal object Constants {
     val B_WORKSPACE = "workspace"
     val PREF_USER = "pref_user"
     val B_TABLE_ID = "table_id"

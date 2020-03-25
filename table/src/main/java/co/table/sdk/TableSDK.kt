@@ -6,6 +6,7 @@ import android.content.Intent
 import android.text.TextUtils
 import co.table.sdk.android.config.*
 import co.table.sdk.android.config.TableAuthentication
+import co.table.sdk.android.constants.Common
 import co.table.sdk.android.dashboard.DashboardActivity
 import co.table.sdk.android.login.RegisterResponseModel
 import co.table.sdk.android.network.API
@@ -52,7 +53,7 @@ class TableSDK private constructor() {
         }
 
         fun registerUser(userID: String, userParams: UserParams, tableLoginCallback: TableLoginCallback?) {
-            registerUser(userID, UserParams(), true, tableLoginCallback)
+            registerUser(userID, userParams, true, tableLoginCallback)
         }
 
         private fun registerUser(userID: String, userParams: UserParams, validateUserParams: Boolean, tableLoginCallback: TableLoginCallback?) {
@@ -62,17 +63,17 @@ class TableSDK private constructor() {
             tableAuthentication.userParams = userParams
 
             if (TextUtils.isEmpty(tableAuthentication.workspaceUrl)) {
-                tableLoginCallback?.onFailure(TABLE_ERROR_NO_WORKSPACE_ADDED)
+                tableLoginCallback?.onFailure(TABLE_ERROR_NO_WORKSPACE_ADDED, Common.errorMessageFromConstant(TABLE_ERROR_NO_WORKSPACE_ADDED))
             } else if (TextUtils.isEmpty(tableAuthentication.apiKey)) {
-                tableLoginCallback?.onFailure(TABLE_ERROR_API_KEY_EMPTY)
+                tableLoginCallback?.onFailure(TABLE_ERROR_API_KEY_EMPTY, Common.errorMessageFromConstant(TABLE_ERROR_API_KEY_EMPTY))
             } else if (TextUtils.isEmpty(tableAuthentication.userID)) {
-                tableLoginCallback?.onFailure(TABLE_ERROR_USER_ID_EMPTY)
+                tableLoginCallback?.onFailure(TABLE_ERROR_USER_ID_EMPTY, Common.errorMessageFromConstant(TABLE_ERROR_USER_ID_EMPTY))
             } else if (validateUserParams && TextUtils.isEmpty(tableAuthentication.userParams.firstName)) {
-                tableLoginCallback?.onFailure(TABLE_ERROR_FIRST_NAME_EMPTY)
+                tableLoginCallback?.onFailure(TABLE_ERROR_FIRST_NAME_EMPTY, Common.errorMessageFromConstant(TABLE_ERROR_FIRST_NAME_EMPTY))
             } else if (validateUserParams && TextUtils.isEmpty(tableAuthentication.userParams.lastName)) {
-                tableLoginCallback?.onFailure(TABLE_ERROR_LAST_NAME_EMPTY)
+                tableLoginCallback?.onFailure(TABLE_ERROR_LAST_NAME_EMPTY, Common.errorMessageFromConstant(TABLE_ERROR_LAST_NAME_EMPTY))
             } else if (validateUserParams && TextUtils.isEmpty(tableAuthentication.userParams.email)) {
-                tableLoginCallback?.onFailure(TABLE_ERROR_EMAIL_EMPTY)
+                tableLoginCallback?.onFailure(TABLE_ERROR_EMAIL_EMPTY, Common.errorMessageFromConstant(TABLE_ERROR_EMAIL_EMPTY))
             } else {
                 register(getTableData().userParams, tableLoginCallback)
             }
@@ -97,7 +98,7 @@ class TableSDK private constructor() {
                 .enqueue(object : Callback,
                     retrofit2.Callback<RegisterResponseModel> {
                     override fun onFailure(call: Call<RegisterResponseModel>, t: Throwable) {
-                        tableLoginCallback?.onFailure(TABLE_ERROR_NETWORK_FAILURE)
+                        tableLoginCallback?.onFailure(TABLE_ERROR_NETWORK_FAILURE, Common.errorMessageFromConstant(TABLE_ERROR_NETWORK_FAILURE) + " " + t.localizedMessage)
                     }
 
                     override fun onResponse(call: Call<RegisterResponseModel>, responseModel: Response<RegisterResponseModel>) {
@@ -109,7 +110,7 @@ class TableSDK private constructor() {
                                 tableLoginCallback?.onSuccessLogin()
                             }
                         } else {
-                            tableLoginCallback?.onFailure(TABLE_ERROR_NETWORK_FAILURE)
+                            tableLoginCallback?.onFailure(TABLE_ERROR_NETWORK_FAILURE, Common.errorMessageFromConstant(TABLE_ERROR_NETWORK_FAILURE) + " " + responseModel.code())
                         }
                     }
                 })
