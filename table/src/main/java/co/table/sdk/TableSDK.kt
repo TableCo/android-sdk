@@ -27,19 +27,6 @@ class TableSDK private constructor() {
         private var initialApplicationContext: Context? = null;
         internal val appSession: AppSession = Session()
 
-        internal fun getTableData(): TableAuthentication {
-            return tableAuthentication
-        }
-
-        // Get the Application Context from the currently shown activity if available, otherwise remember the one we were initialised with
-        internal val applicationContext: Context? get() {
-            return if (activityLifecycleWatcher.currentActivity?.applicationContext != null) {
-                activityLifecycleWatcher.currentActivity?.applicationContext
-            } else {
-                initialApplicationContext
-            }
-        }
-
         fun init(application: Application, workspaceUrl: String, apiKey: String) {
             tableAuthentication.workspaceUrl = workspaceUrl
             tableAuthentication.apiKey = apiKey
@@ -53,6 +40,56 @@ class TableSDK private constructor() {
 
         fun registerUser(userID: String, userParams: UserParams, tableLoginCallback: TableLoginCallback?) {
             registerUser(userID, userParams, true, tableLoginCallback)
+        }
+
+        fun useDefaultLauncher(isDefaultLauncher: Boolean) {
+            Companion.isDefaultLauncher = isDefaultLauncher
+        }
+
+        fun showConversationList(context: Context) {
+            if (appSession.isAuthenticated()){
+                context.startActivity(Intent(context,DashboardActivity::class.java))
+            }
+        }
+
+        fun logout() {
+            appSession.logout()
+        }
+
+        internal fun getTableData(): TableAuthentication {
+            return tableAuthentication
+        }
+
+        // Get the Application Context from the currently shown activity if available, otherwise remember the one we were initialised with
+        internal val applicationContext: Context? get() {
+            return if (activityLifecycleWatcher.currentActivity?.applicationContext != null) {
+                activityLifecycleWatcher.currentActivity?.applicationContext
+            } else {
+                initialApplicationContext
+            }
+        }
+
+        private fun register(params: UserParamsModel, tableLoginCallback: TableLoginCallback?) {
+            ApiClient().getRetrofitObject(tableAuthentication.workspaceUrl, null).register(params)
+                .enqueue(object : Callback,
+                    retrofit2.Callback<RegisterResponseModel> {
+                    override fun onFailure(call: Call<RegisterResponseModel>, t: Throwable) {
+                        tableLoginCallback?.onFailure(TABLE_ERROR_NETWORK_FAILURE, Common.errorMessageFromConstant(TABLE_ERROR_NETWORK_FAILURE) + " " + t.localizedMessage)
+                    }
+
+                    override fun onResponse(call: Call<RegisterResponseModel>, responseModel: Response<RegisterResponseModel>) {
+                        if (responseModel.code() == 200) {
+                            val registerResponse = responseModel.body()!!
+                            registerResponse.user?.let {
+                                it.workspace = tableAuthentication.workspaceUrl
+                                appSession.saveSession(it)
+                                tableLoginCallback?.onSuccessLogin()
+                            }
+                        } else {
+                            tableLoginCallback?.onFailure(TABLE_ERROR_NETWORK_FAILURE, Common.errorMessageFromConstant(TABLE_ERROR_NETWORK_FAILURE) + " " + responseModel.code())
+                        }
+                    }
+                })
         }
 
         private fun registerUser(userID: String, userParams: UserParams, validateUserParams: Boolean, tableLoginCallback: TableLoginCallback?) {
@@ -79,45 +116,6 @@ class TableSDK private constructor() {
                 }
             }
         }
-
-        fun useDefaultLauncher(isDefaultLauncher: Boolean) {
-            Companion.isDefaultLauncher = isDefaultLauncher
-        }
-
-        fun showConversationList(context: Context) {
-            if (appSession.isAuthenticated()){
-                context.startActivity(Intent(context,DashboardActivity::class.java))
-            }
-        }
-
-        fun logout() {
-            appSession.logout()
-        }
-
-        private fun register(params: UserParamsModel, tableLoginCallback: TableLoginCallback?) {
-            ApiClient().getRetrofitObject(tableAuthentication.workspaceUrl, null).register(params)
-                .enqueue(object : Callback,
-                    retrofit2.Callback<RegisterResponseModel> {
-                    override fun onFailure(call: Call<RegisterResponseModel>, t: Throwable) {
-                        tableLoginCallback?.onFailure(TABLE_ERROR_NETWORK_FAILURE, Common.errorMessageFromConstant(TABLE_ERROR_NETWORK_FAILURE) + " " + t.localizedMessage)
-                    }
-
-                    override fun onResponse(call: Call<RegisterResponseModel>, responseModel: Response<RegisterResponseModel>) {
-                        if (responseModel.code() == 200) {
-                            val registerResponse = responseModel.body()!!
-                            registerResponse.user?.let {
-                                it.workspace = tableAuthentication.workspaceUrl
-                                appSession.saveSession(it)
-                                tableLoginCallback?.onSuccessLogin()
-                            }
-                        } else {
-                            tableLoginCallback?.onFailure(TABLE_ERROR_NETWORK_FAILURE, Common.errorMessageFromConstant(TABLE_ERROR_NETWORK_FAILURE) + " " + responseModel.code())
-                        }
-                    }
-                })
-        }
-
-
     }
 
 }
