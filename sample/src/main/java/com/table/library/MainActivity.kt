@@ -37,7 +37,7 @@ class MainActivity : AppCompatActivity(), TableLoginCallback {
 
     fun onRegisterAnonymous(view: View) {
         showProgressDialog(this)
-        TableSDK.registerUnidentifiedUser("anonymous_user_id", this)
+        TableSDK.registerUnidentifiedUser("anonymous_user_id-2", this)
     }
 
     override fun onSuccessLogin() {
