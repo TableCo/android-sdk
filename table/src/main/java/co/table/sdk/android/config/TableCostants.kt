@@ -9,4 +9,4 @@ public const val TABLE_ERROR_LAST_NAME_EMPTY = 106
 public const val TABLE_ERROR_EMAIL_EMPTY = 107
 public const val TABLE_ERROR_NETWORK_FAILURE = 108
 public const val TABLE_ERROR_ALL_READY_REGISTERED = 109
-public const val TABLE_ERROR_ = 10
+public const val TABLE_ERROR_GENERAL = 10

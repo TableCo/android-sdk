@@ -120,6 +120,7 @@ internal object Common {
             TABLE_ERROR_EMAIL_EMPTY -> "Email address field is empty"
             TABLE_ERROR_NETWORK_FAILURE -> "Network error"
             TABLE_ERROR_ALL_READY_REGISTERED -> "User is already registered"
+            TABLE_ERROR_GENERAL -> "General error"
             else -> "Unknown error"
         }
     }

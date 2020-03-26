@@ -2,9 +2,7 @@ package co.table.sdk.android.network
 
 import co.table.sdk.android.config.UserParams
 import co.table.sdk.android.dashboard.HeaderResponseModel
-import co.table.sdk.android.login.LoginRequest
-import co.table.sdk.android.login.RegisterResponseModel
-import co.table.sdk.android.login.UserModel
+import co.table.sdk.android.network.models.*
 import co.table.sdk.android.network.models.ApiKeyResponseModel
 import co.table.sdk.android.network.models.CreateConversationResponseModel
 import co.table.sdk.android.network.models.TokenRequestModel
@@ -17,12 +15,6 @@ import retrofit2.http.Path
 
 internal interface ApiInterface {
 
-    @POST(API.LOGIN)
-    fun login(@Body params: LoginRequest): Call<UserModel>
-
-    @POST(API.GOOGLE_SIGNIN)
-    fun googleSignIn(@Body params: LoginRequest): Call<UserModel>
-
     @GET(API.GET_HEADER + "{tableId}")
     fun getHeader(@Path("tableId") tableId: String): Call<HeaderResponseModel>
 
@@ -33,7 +25,7 @@ internal interface ApiInterface {
     fun sendToken(@Body params: TokenRequestModel): Call<TokenResponseModel>
 
     @POST(API.AUTH_USER)
-    fun register(@Body params: UserParams): Call<RegisterResponseModel>
+    fun register(@Body params: UserParamsModel): Call<RegisterResponseModel>
 
     @POST(API.CREATE_CONVERSATION)
     fun createConversation(@Body blankObject: Map<String, String>): Call<CreateConversationResponseModel>

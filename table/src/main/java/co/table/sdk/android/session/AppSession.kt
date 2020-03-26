@@ -1,10 +1,10 @@
 package co.table.sdk.android.session
 
-import co.table.sdk.android.login.UserModel
+import co.table.sdk.android.network.models.UserResponseModel
 
 internal interface AppSession {
-    fun currentUser(): UserModel?
+    fun currentUser(): UserResponseModel?
     fun isAuthenticated(): Boolean
     fun logout()
-    fun saveSession(user: UserModel)
+    fun saveSession(user: UserResponseModel)
 }

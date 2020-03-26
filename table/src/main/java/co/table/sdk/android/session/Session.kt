@@ -4,7 +4,7 @@ import android.content.Context
 import co.table.sdk.TableSDK
 import co.table.sdk.TableSDK.Companion.applicationContext
 import co.table.sdk.android.constants.PrefUtils
-import co.table.sdk.android.login.UserModel
+import co.table.sdk.android.network.models.UserResponseModel
 
 internal class Session() : AppSession {
     companion object {
@@ -18,7 +18,7 @@ internal class Session() : AppSession {
         }
     }
 
-    override fun currentUser(): UserModel? {
+    override fun currentUser(): UserResponseModel? {
         val context = applicationContext
         return if (context != null) {
             PrefUtils.getUser(context)
@@ -40,7 +40,7 @@ internal class Session() : AppSession {
         applicationContext?.let{ PrefUtils.clearAll(it) }
     }
 
-    override fun saveSession(user: UserModel) {
+    override fun saveSession(user: UserResponseModel) {
         applicationContext?.let{ PrefUtils.saveUser(it, user) }
     }
 

@@ -24,7 +24,6 @@ import co.table.sdk.android.network.ApiResponseInterface
 import co.table.sdk.android.network.models.CreateConversationResponseModel
 import kotlinx.android.synthetic.main.activity_dashboard.*
 
-//TODO: New message button
 internal class DashboardActivity : AppCompatActivity(), ApiResponseInterface {
     private val FILECHOOSER_RESULTCODE = 101
     private var tableId = ""

@@ -3,16 +3,16 @@ package co.table.sdk.android.chat
 import androidx.lifecycle.MutableLiveData
 import co.table.sdk.TableSDK
 import co.table.sdk.android.jetpack.viewmodel.ObservableViewModel
-import co.table.sdk.android.login.UserModel
 import co.table.sdk.android.network.ApiClient
 import co.table.sdk.android.network.ApiResponseInterface
 import co.table.sdk.android.network.models.ApiKeyResponseModel
+import co.table.sdk.android.network.models.UserResponseModel
 import retrofit2.Call
 import retrofit2.Response
 import javax.security.auth.callback.Callback
 
 internal class VideoViewModel : ObservableViewModel() {
-    var userModel = MutableLiveData<UserModel>()
+    var userModel = MutableLiveData<UserResponseModel>()
     var apiKey = MutableLiveData<String>()
     fun getApiKey(apiTag: String, responseInterface: ApiResponseInterface) {
         ApiClient().getRetrofitObject(

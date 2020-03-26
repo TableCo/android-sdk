@@ -8,9 +8,9 @@ import co.table.sdk.android.config.*
 import co.table.sdk.android.config.TableAuthentication
 import co.table.sdk.android.constants.Common
 import co.table.sdk.android.dashboard.DashboardActivity
-import co.table.sdk.android.login.RegisterResponseModel
-import co.table.sdk.android.network.API
 import co.table.sdk.android.network.ApiClient
+import co.table.sdk.android.network.models.RegisterResponseModel
+import co.table.sdk.android.network.models.UserParamsModel
 import co.table.sdk.android.session.ActivityLifecycleWatcher
 import co.table.sdk.android.session.AppSession
 import co.table.sdk.android.session.Session
@@ -18,7 +18,6 @@ import retrofit2.Call
 import retrofit2.Response
 import javax.security.auth.callback.Callback
 
-//TODO: Ensure everything is correctly exposed to Java
 class TableSDK private constructor() {
 
     companion object {
@@ -58,9 +57,7 @@ class TableSDK private constructor() {
 
         private fun registerUser(userID: String, userParams: UserParams, validateUserParams: Boolean, tableLoginCallback: TableLoginCallback?) {
             tableAuthentication.userID = userID
-            userParams.userId = userID
-            userParams.apiKey = tableAuthentication.apiKey
-            tableAuthentication.userParams = userParams
+            tableAuthentication.userParamsModel = UserParamsModel(userParams, userID, tableAuthentication.apiKey)
 
             if (TextUtils.isEmpty(tableAuthentication.workspaceUrl)) {
                 tableLoginCallback?.onFailure(TABLE_ERROR_NO_WORKSPACE_ADDED, Common.errorMessageFromConstant(TABLE_ERROR_NO_WORKSPACE_ADDED))
@@ -68,14 +65,18 @@ class TableSDK private constructor() {
                 tableLoginCallback?.onFailure(TABLE_ERROR_API_KEY_EMPTY, Common.errorMessageFromConstant(TABLE_ERROR_API_KEY_EMPTY))
             } else if (TextUtils.isEmpty(tableAuthentication.userID)) {
                 tableLoginCallback?.onFailure(TABLE_ERROR_USER_ID_EMPTY, Common.errorMessageFromConstant(TABLE_ERROR_USER_ID_EMPTY))
-            } else if (validateUserParams && TextUtils.isEmpty(tableAuthentication.userParams.firstName)) {
+            } else if (validateUserParams && TextUtils.isEmpty(tableAuthentication.userParamsModel?.firstName)) {
                 tableLoginCallback?.onFailure(TABLE_ERROR_FIRST_NAME_EMPTY, Common.errorMessageFromConstant(TABLE_ERROR_FIRST_NAME_EMPTY))
-            } else if (validateUserParams && TextUtils.isEmpty(tableAuthentication.userParams.lastName)) {
+            } else if (validateUserParams && TextUtils.isEmpty(tableAuthentication.userParamsModel?.lastName)) {
                 tableLoginCallback?.onFailure(TABLE_ERROR_LAST_NAME_EMPTY, Common.errorMessageFromConstant(TABLE_ERROR_LAST_NAME_EMPTY))
-            } else if (validateUserParams && TextUtils.isEmpty(tableAuthentication.userParams.email)) {
+            } else if (validateUserParams && TextUtils.isEmpty(tableAuthentication.userParamsModel?.email)) {
                 tableLoginCallback?.onFailure(TABLE_ERROR_EMAIL_EMPTY, Common.errorMessageFromConstant(TABLE_ERROR_EMAIL_EMPTY))
             } else {
-                register(getTableData().userParams, tableLoginCallback)
+                if (getTableData().userParamsModel != null) {
+                    register(getTableData().userParamsModel!!, tableLoginCallback)
+                } else {
+                    tableLoginCallback?.onFailure(TABLE_ERROR_GENERAL, "Inconsistent data during registration")
+                }
             }
         }
 
@@ -93,7 +94,7 @@ class TableSDK private constructor() {
             appSession.logout()
         }
 
-        private fun register(params: UserParams, tableLoginCallback: TableLoginCallback?) {
+        private fun register(params: UserParamsModel, tableLoginCallback: TableLoginCallback?) {
             ApiClient().getRetrofitObject(tableAuthentication.workspaceUrl, null).register(params)
                 .enqueue(object : Callback,
                     retrofit2.Callback<RegisterResponseModel> {

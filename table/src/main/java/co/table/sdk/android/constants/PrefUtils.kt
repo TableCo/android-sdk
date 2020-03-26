@@ -2,7 +2,7 @@ package co.table.sdk.android.constants
 
 import android.content.Context
 import android.content.SharedPreferences
-import co.table.sdk.android.login.UserModel
+import co.table.sdk.android.network.models.UserResponseModel
 import com.google.gson.Gson
 
 internal class PrefUtils {
@@ -152,18 +152,18 @@ internal class PrefUtils {
             editor.commit()
         }
 
-        fun saveUser(context: Context, userModel: UserModel): Boolean {
+        fun saveUser(context: Context, userResponseModel: UserResponseModel): Boolean {
             val editor = getPreferences(context).edit()
-            val str = Gson().toJson(userModel)
+            val str = Gson().toJson(userResponseModel)
             editor.putString(Constants.PREF_USER, str)
             return editor.commit()
         }
 
-        fun getUser(context: Context): UserModel? {
+        fun getUser(context: Context): UserResponseModel? {
             val prefs = getPreferences(context)
             val str = prefs.getString(Constants.PREF_USER, null)
             return if (str != null) {
-                Gson().fromJson<UserModel>(str.toString(), UserModel::class.java!!)
+                Gson().fromJson<UserResponseModel>(str.toString(), UserResponseModel::class.java!!)
             } else {
                 null
             }
