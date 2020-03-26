@@ -75,8 +75,6 @@ internal class DashboardActivity : AppCompatActivity(), ApiResponseInterface {
                 if (view != null && url != null && url.isNotEmpty()) {
                     view.loadUrl("javascript:window.android.onUrlChange(window.location.href);")
                 }
-
-                progressBar.visibility = View.GONE
             }
 
 
