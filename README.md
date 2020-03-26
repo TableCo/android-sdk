@@ -16,9 +16,9 @@ allprojects {
 1. Add the Table dependency to your app's build.gradle file:
 
 ```groovy
-	dependencies {
-	        implementation 'com.github.TableCo:android-sdk:0.1.1'
-	}
+dependencies {
+    implementation 'com.github.TableCo:android-sdk:0.1.1'
+}
 ```
 
 # Usage
