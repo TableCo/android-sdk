@@ -25,6 +25,11 @@ import co.table.sdk.android.network.models.CreateConversationResponseModel
 import kotlinx.android.synthetic.main.activity_dashboard.*
 
 internal class DashboardActivity : AppCompatActivity(), ApiResponseInterface {
+
+    companion object {
+        val EXTRA_COLOR_INT = "color"
+    }
+
     private val FILECHOOSER_RESULTCODE = 101
     private var tableId = ""
     lateinit var binding: ActivityDashboardBinding
@@ -37,6 +42,7 @@ internal class DashboardActivity : AppCompatActivity(), ApiResponseInterface {
             this, R.layout.activity_dashboard
         )
         dashboardDataViewModel = ViewModelProviders.of(this).get(DashboardDataViewModel::class.java)
+        dashboardDataViewModel.themeColorInt = intent.getIntExtra(EXTRA_COLOR_INT, 0)
         ApiLifeCycle(this, this, dashboardDataViewModel)
         binding.dashboardViewModel = dashboardDataViewModel
         binding.lifecycleOwner = this

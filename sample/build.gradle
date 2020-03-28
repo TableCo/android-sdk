@@ -33,10 +33,10 @@ android {
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
-    // Switch between the local version and the Jitpack version here:
-    // https://jitpack.io/#TableCo/android-sdk/0.1.0
+    // Switch between the local library and the public library here:
+    // See https://jitpack.io/#TableCo/android-sdk/ for the latest versions
     implementation project(':table')
-//    implementation 'com.github.TableCo:android-sdk:0.1.0'
+//    implementation 'com.github.TableCo:android-sdk:0.1.1'
 
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     implementation 'androidx.appcompat:appcompat:1.1.0'
