@@ -36,7 +36,7 @@
                     android:layout_centerVertical="true"
                     android:visibility="gone"
                     android:onClick="onBackClick"
-                    android:src="@drawable/ic_back"
+                    android:src="@drawable/ic_menu"
                     android:layout_alignParentStart="true" />
 
                 <co.table.sdk.android.views.CustomTextView
@@ -44,7 +44,7 @@
                     android:layout_height="wrap_content"
                     android:layout_centerHorizontal="true"
                     android:layout_centerVertical="true"
-                    android:textColor="@color/colorBlack"
+                    android:textColor="@color/colorWhite"
                     android:text="@{dashboardViewModel.headerTitle}"
                     android:textSize="18sp"
                     app:customFont="medium" />
@@ -57,8 +57,7 @@
                     android:layout_centerVertical="true"
                     android:layout_marginRight="20dp"
                     android:onClick="onNewMessage"
-                    android:alpha="0.6"
-                    android:src="@drawable/ic_add_comment_black"
+                    android:src="@drawable/ic_search"
                     android:layout_alignParentEnd="true" />
 
             </RelativeLayout>
