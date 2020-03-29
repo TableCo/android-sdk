@@ -50,7 +50,7 @@
                     app:customFont="medium" />
 
                 <ImageView
-                    android:id="@+id/ivSettings"
+                    android:id="@+id/ivNewMessage"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"

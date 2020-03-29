@@ -83,9 +83,12 @@ internal class DashboardActivity : AppCompatActivity(), ApiResponseInterface {
                 }
             }
 
-
             override fun doUpdateVisitedHistory(view: WebView?, url: String?, isReload: Boolean) {
                 super.doUpdateVisitedHistory(view, url, isReload)
+
+                // Only show the new message button when we're on the first conversation screen
+                ivNewMessage.visibility = if (url?.endsWith("/conversation") != false) { View.VISIBLE } else { View.GONE }
+
                 if (view!!.canGoBack()) {
                     binding.ivBack.visibility = View.VISIBLE
 
