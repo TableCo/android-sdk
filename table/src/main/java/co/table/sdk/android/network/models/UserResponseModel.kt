@@ -22,4 +22,7 @@ internal class UserResponseModel {
     @SerializedName("workspace")
     @Expose
     var workspace: String? = null
+    @SerializedName("experience_short_code")
+    @Expose
+    var experienceShortCode: String? = null
 }

@@ -30,9 +30,10 @@ class TableSDK private constructor() {
         private var initialApplicationContext: Context? = null;
         internal val appSession: AppSession = Session()
 
-        fun init(application: Application, workspaceUrl: String, apiKey: String) {
+        fun init(application: Application, workspaceUrl: String, apiKey: String, experienceShortCode: String? = null) {
             tableData.workspaceUrl = workspaceUrl
             tableData.apiKey = apiKey
+            tableData.experienceShortCode = experienceShortCode
             initialApplicationContext = application.applicationContext
             application.registerActivityLifecycleCallbacks(activityLifecycleWatcher)
 
@@ -89,6 +90,7 @@ class TableSDK private constructor() {
                             val registerResponse = responseModel.body()!!
                             registerResponse.user?.let {
                                 it.workspace = tableData.workspaceUrl
+                                it.experienceShortCode = tableData.experienceShortCode
                                 appSession.saveSession(it)
                                 tableLoginCallback?.onSuccessLogin()
                             }
