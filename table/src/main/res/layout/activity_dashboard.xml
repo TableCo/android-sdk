@@ -22,46 +22,27 @@
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            android:background="@color/colorWhite"
+            android:background="@{dashboardViewModel.themeColorInt}"
             android:elevation="1dp">
 
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
-                <ImageView
-                    android:id="@+id/ivBack"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentLeft="true"
-                    android:layout_centerVertical="true"
-                    android:visibility="gone"
-                    android:onClick="onBackClick"
-                    android:src="@drawable/ic_back"
-                    android:layout_alignParentStart="true" />
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true">
 
                 <co.table.sdk.android.views.CustomTextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerHorizontal="true"
                     android:layout_centerVertical="true"
-                    android:textColor="@color/colorBlack"
+                    android:textColor="@color/colorWhite"
                     android:text="@{dashboardViewModel.headerTitle}"
                     android:textSize="18sp"
                     app:customFont="medium" />
-
-                <ImageView
-                    android:id="@+id/ivSettings"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true"
-                    android:layout_centerVertical="true"
-                    android:layout_marginRight="20dp"
-                    android:onClick="onNewMessage"
-                    android:alpha="0.6"
-                    android:src="@drawable/ic_add_comment_black"
-                    android:layout_alignParentEnd="true" />
-
             </RelativeLayout>
+            
         </androidx.appcompat.widget.Toolbar>
 
         <RelativeLayout

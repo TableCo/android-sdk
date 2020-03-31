@@ -1,5 +1,6 @@
 package co.table.sdk.android.dashboard
 
+import androidx.annotation.ColorInt
 import androidx.lifecycle.MutableLiveData
 import co.table.sdk.TableSDK
 import co.table.sdk.android.jetpack.viewmodel.ObservableViewModel
@@ -15,6 +16,8 @@ import javax.security.auth.callback.Callback
 internal class DashboardDataViewModel : ObservableViewModel() {
     var headerResponseModel = MutableLiveData<HeaderResponseModel>()
     var headerTitle = MutableLiveData<String>()
+    var shouldShowNewMessage = MutableLiveData(false)
+    @ColorInt var themeColorInt = 0;
 
     fun getHeader(tableId: String, apiTag: String, responseInterface: ApiResponseInterface) {
         val workspace = TableSDK.appSession.currentUser()?.workspace
