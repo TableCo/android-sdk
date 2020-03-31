@@ -2,15 +2,20 @@ package co.table.sdk.android.dashboard
 
 import android.app.Activity
 import android.content.Intent
+import android.graphics.Color
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
+import android.view.Menu
+import android.view.MenuItem
 import android.view.View
 import android.webkit.*
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import co.table.sdk.TableSDK
 import co.table.sdk.android.R
@@ -35,6 +40,7 @@ internal class DashboardActivity : AppCompatActivity(), ApiResponseInterface {
     lateinit var binding: ActivityDashboardBinding
     lateinit var dashboardDataViewModel: DashboardDataViewModel
     var webViewFileCallback: ValueCallback<Array<Uri>>? = null
+    private var showNewMessageMenu = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -49,6 +55,37 @@ internal class DashboardActivity : AppCompatActivity(), ApiResponseInterface {
         setSupportActionBar(toolbar)
         initWebView()
         dashboardDataViewModel.headerTitle.value = getString(R.string.all_conversation)
+
+        // Set up the toolbar
+        toolbar.title = getString(R.string.all_conversation)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            toolbar.navigationIcon = getDrawable(R.drawable.ic_menu)
+            toolbar.navigationIcon?.setTint(Color.WHITE)
+        }
+
+        setSupportActionBar(toolbar)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        supportActionBar?.setDisplayShowHomeEnabled(true)
+        supportActionBar?.setDisplayShowTitleEnabled(false)
+
+        dashboardDataViewModel.shouldShowNewMessage.observe(this, Observer { invalidateOptionsMenu() })
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.new_message, menu)
+
+        // Disable or enable the menu item depending on the view model
+        menu?.getItem(0)?.let {
+            if (dashboardDataViewModel.shouldShowNewMessage.value!!) {
+                it.isEnabled = true
+                it.icon?.alpha = 255
+            } else {
+                it.isEnabled = false
+                it.icon?.alpha = 153
+            }
+        }
+
+        return true
     }
 
     private fun conversationIdFromUrl(urlString: String): String? {
@@ -87,11 +124,9 @@ internal class DashboardActivity : AppCompatActivity(), ApiResponseInterface {
                 super.doUpdateVisitedHistory(view, url, isReload)
 
                 // Only show the new message button when we're on the first conversation screen
-                ivNewMessage.visibility = if (url?.endsWith("/conversation") != false) { View.VISIBLE } else { View.GONE }
+                dashboardDataViewModel.shouldShowNewMessage.value = url?.endsWith("/conversation") != false
 
                 if (view!!.canGoBack()) {
-                    binding.ivBack.visibility = View.VISIBLE
-
                     // https://develop3.dev.table.co/conversation/c34ed657-341b-4be2-a08a-4e575b363b7e
 
                     if (url != null && url.isNotEmpty()) {
@@ -106,7 +141,6 @@ internal class DashboardActivity : AppCompatActivity(), ApiResponseInterface {
                     }
 
                 } else {
-                    binding.ivBack.visibility = View.VISIBLE
                     dashboardDataViewModel.headerTitle.value = getString(R.string.all_conversation)
                 }
             }
@@ -194,7 +228,15 @@ internal class DashboardActivity : AppCompatActivity(), ApiResponseInterface {
         }
     }
 
-    fun onBackClick(view: View) {
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when(item.itemId) {
+            R.id.menuNewMessage -> { onNewMessage(); true }
+            android.R.id.home -> { onBackClick(); true }
+            else -> super.onOptionsItemSelected(item)
+        }
+    }
+
+    private fun onBackClick() {
         if (webView.canGoBack()) {
             webView.goBack()
         } else {
@@ -220,20 +262,9 @@ internal class DashboardActivity : AppCompatActivity(), ApiResponseInterface {
         }
     }
 
-    fun onNewMessage(view: View) {
+    private fun onNewMessage() {
         Common.showProgressDialog(this)
         dashboardDataViewModel.createConversation(this)
-    }
-
-    fun onSettingClick(view: View) {
-//        if (webView!!.canGoBack()) {
-//            var intent = Intent(this, ConversationSettingActivity::class.java)
-//            intent.putExtra(Constants.B_TABLE_ID, tableId)
-//            startActivity(intent)
-//        } else {
-//            var intent = Intent(this, AccountSettingActivity::class.java)
-//            startActivity(intent)
-//        }
     }
 
     override fun onSuccess(successResponse: Any?, apiTag: String) {

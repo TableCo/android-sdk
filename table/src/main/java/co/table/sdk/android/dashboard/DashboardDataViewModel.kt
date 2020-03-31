@@ -16,6 +16,7 @@ import javax.security.auth.callback.Callback
 internal class DashboardDataViewModel : ObservableViewModel() {
     var headerResponseModel = MutableLiveData<HeaderResponseModel>()
     var headerTitle = MutableLiveData<String>()
+    var shouldShowNewMessage = MutableLiveData(false)
     @ColorInt var themeColorInt = 0;
 
     fun getHeader(tableId: String, apiTag: String, responseInterface: ApiResponseInterface) {
