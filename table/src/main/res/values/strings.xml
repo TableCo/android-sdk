@@ -29,4 +29,5 @@
     <string name="pls_enter_valid_workspace">Please enter valid workspace.</string>
     <string name="flip_camera">Flip Camera</string>
     <string name="end_call">End Call</string>
+    <string name="new_message">New Message</string>
 </resources>

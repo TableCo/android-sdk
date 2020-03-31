@@ -4,11 +4,13 @@ import android.app.Application
 import android.content.Context
 import android.content.Intent
 import android.text.TextUtils
+import android.util.Log
 import co.table.sdk.android.config.*
-import co.table.sdk.android.config.TableAuthentication
+import co.table.sdk.android.config.TableData
 import co.table.sdk.android.constants.Common
 import co.table.sdk.android.dashboard.DashboardActivity
 import co.table.sdk.android.network.ApiClient
+import co.table.sdk.android.network.models.InstallationPropertiesResponse
 import co.table.sdk.android.network.models.RegisterResponseModel
 import co.table.sdk.android.network.models.UserParamsModel
 import co.table.sdk.android.session.ActivityLifecycleWatcher
@@ -21,17 +23,20 @@ import javax.security.auth.callback.Callback
 class TableSDK private constructor() {
 
     companion object {
+        internal val LOG_TAG = "Table SDK"
         private var isDefaultLauncher: Boolean = false
-        private var tableAuthentication: TableAuthentication = TableAuthentication()
+        private var tableData: TableData = TableData()
         private val activityLifecycleWatcher = ActivityLifecycleWatcher()
         private var initialApplicationContext: Context? = null;
         internal val appSession: AppSession = Session()
 
         fun init(application: Application, workspaceUrl: String, apiKey: String) {
-            tableAuthentication.workspaceUrl = workspaceUrl
-            tableAuthentication.apiKey = apiKey
+            tableData.workspaceUrl = workspaceUrl
+            tableData.apiKey = apiKey
             initialApplicationContext = application.applicationContext
             application.registerActivityLifecycleCallbacks(activityLifecycleWatcher)
+
+            updateTheme()
         }
 
         fun registerUnidentifiedUser(userID: String, tableLoginCallback: TableLoginCallback?) {
@@ -47,8 +52,10 @@ class TableSDK private constructor() {
         }
 
         fun showConversationList(context: Context) {
-            if (appSession.isAuthenticated()){
-                context.startActivity(Intent(context,DashboardActivity::class.java))
+            if (appSession.isAuthenticated()) {
+                val intent = Intent(context, DashboardActivity::class.java)
+                intent.putExtra(DashboardActivity.EXTRA_COLOR_INT, tableData.themeColor)
+                context.startActivity(intent)
             }
         }
 
@@ -56,8 +63,8 @@ class TableSDK private constructor() {
             appSession.logout()
         }
 
-        internal fun getTableData(): TableAuthentication {
-            return tableAuthentication
+        internal fun getTableData(): TableData {
+            return tableData
         }
 
         // Get the Application Context from the currently shown activity if available, otherwise remember the one we were initialised with
@@ -70,7 +77,7 @@ class TableSDK private constructor() {
         }
 
         private fun register(params: UserParamsModel, tableLoginCallback: TableLoginCallback?) {
-            ApiClient().getRetrofitObject(tableAuthentication.workspaceUrl, null).register(params)
+            ApiClient().getRetrofitObject(tableData.workspaceUrl, null).register(params)
                 .enqueue(object : Callback,
                     retrofit2.Callback<RegisterResponseModel> {
                     override fun onFailure(call: Call<RegisterResponseModel>, t: Throwable) {
@@ -81,7 +88,7 @@ class TableSDK private constructor() {
                         if (responseModel.code() == 200) {
                             val registerResponse = responseModel.body()!!
                             registerResponse.user?.let {
-                                it.workspace = tableAuthentication.workspaceUrl
+                                it.workspace = tableData.workspaceUrl
                                 appSession.saveSession(it)
                                 tableLoginCallback?.onSuccessLogin()
                             }
@@ -92,21 +99,44 @@ class TableSDK private constructor() {
                 })
         }
 
-        private fun registerUser(userID: String, userParams: UserParams, validateUserParams: Boolean, tableLoginCallback: TableLoginCallback?) {
-            tableAuthentication.userID = userID
-            tableAuthentication.userParamsModel = UserParamsModel(userParams, userID, tableAuthentication.apiKey)
+        private fun updateTheme() {
+            ApiClient().getRetrofitObject(tableData.workspaceUrl, null).getInstallationProperties()
+                    .enqueue(object : Callback,
+                            retrofit2.Callback<InstallationPropertiesResponse> {
+                        override fun onFailure(call: Call<InstallationPropertiesResponse>, t: Throwable) {
+                            Log.e(LOG_TAG, "Failed to get installation properties ${t.localizedMessage}", t)
+                        }
 
-            if (TextUtils.isEmpty(tableAuthentication.workspaceUrl)) {
+                        override fun onResponse(call: Call<InstallationPropertiesResponse>, responseModel: Response<InstallationPropertiesResponse>) {
+                            if (responseModel.code() == 200) {
+                                val installationProperties = responseModel.body()
+                                val color = installationProperties?.themeOverrides?.semanticPalette?.asColor
+                                color?.let {
+                                    Log.i(LOG_TAG, "Got the installation properties theme color $color")
+                                    getTableData().themeColor = it
+                                }
+                            } else {
+                                Log.e(LOG_TAG, "Failed to get the installation properties theme color ${responseModel.code()} ${responseModel.errorBody()}")
+                            }
+                        }
+                    })
+        }
+
+        private fun registerUser(userID: String, userParams: UserParams, validateUserParams: Boolean, tableLoginCallback: TableLoginCallback?) {
+            tableData.userID = userID
+            tableData.userParamsModel = UserParamsModel(userParams, userID, tableData.apiKey)
+
+            if (TextUtils.isEmpty(tableData.workspaceUrl)) {
                 tableLoginCallback?.onFailure(TABLE_ERROR_NO_WORKSPACE_ADDED, Common.errorMessageFromConstant(TABLE_ERROR_NO_WORKSPACE_ADDED))
-            } else if (TextUtils.isEmpty(tableAuthentication.apiKey)) {
+            } else if (TextUtils.isEmpty(tableData.apiKey)) {
                 tableLoginCallback?.onFailure(TABLE_ERROR_API_KEY_EMPTY, Common.errorMessageFromConstant(TABLE_ERROR_API_KEY_EMPTY))
-            } else if (TextUtils.isEmpty(tableAuthentication.userID)) {
+            } else if (TextUtils.isEmpty(tableData.userID)) {
                 tableLoginCallback?.onFailure(TABLE_ERROR_USER_ID_EMPTY, Common.errorMessageFromConstant(TABLE_ERROR_USER_ID_EMPTY))
-            } else if (validateUserParams && TextUtils.isEmpty(tableAuthentication.userParamsModel?.firstName)) {
+            } else if (validateUserParams && TextUtils.isEmpty(tableData.userParamsModel?.firstName)) {
                 tableLoginCallback?.onFailure(TABLE_ERROR_FIRST_NAME_EMPTY, Common.errorMessageFromConstant(TABLE_ERROR_FIRST_NAME_EMPTY))
-            } else if (validateUserParams && TextUtils.isEmpty(tableAuthentication.userParamsModel?.lastName)) {
+            } else if (validateUserParams && TextUtils.isEmpty(tableData.userParamsModel?.lastName)) {
                 tableLoginCallback?.onFailure(TABLE_ERROR_LAST_NAME_EMPTY, Common.errorMessageFromConstant(TABLE_ERROR_LAST_NAME_EMPTY))
-            } else if (validateUserParams && TextUtils.isEmpty(tableAuthentication.userParamsModel?.email)) {
+            } else if (validateUserParams && TextUtils.isEmpty(tableData.userParamsModel?.email)) {
                 tableLoginCallback?.onFailure(TABLE_ERROR_EMAIL_EMPTY, Common.errorMessageFromConstant(TABLE_ERROR_EMAIL_EMPTY))
             } else {
                 if (getTableData().userParamsModel != null) {

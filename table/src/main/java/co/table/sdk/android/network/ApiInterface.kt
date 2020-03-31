@@ -30,4 +30,7 @@ internal interface ApiInterface {
     @POST(API.CREATE_CONVERSATION)
     fun createConversation(@Body blankObject: Map<String, String>): Call<CreateConversationResponseModel>
 
+    @GET(API.GET_INSTALLATION_PROPERTIES)
+    fun getInstallationProperties(): Call<InstallationPropertiesResponse>
+
 }
