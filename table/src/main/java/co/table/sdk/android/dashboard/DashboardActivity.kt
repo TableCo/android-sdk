@@ -9,11 +9,9 @@ import android.os.Bundle
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
-import android.view.View
 import android.webkit.*
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
@@ -114,10 +112,6 @@ internal class DashboardActivity : AppCompatActivity(), ApiResponseInterface {
         webView.webViewClient = object : WebViewClient() {
             override fun onPageFinished(view: WebView?, url: String?) {
                 super.onPageFinished(view, url)
-
-                if (view != null && url != null && url.isNotEmpty()) {
-                    view.loadUrl("javascript:window.android.onUrlChange(window.location.href);")
-                }
             }
 
             override fun doUpdateVisitedHistory(view: WebView?, url: String?, isReload: Boolean) {
@@ -127,8 +121,6 @@ internal class DashboardActivity : AppCompatActivity(), ApiResponseInterface {
                 dashboardDataViewModel.shouldShowNewMessage.value = url?.endsWith("/conversation") != false
 
                 if (view!!.canGoBack()) {
-                    // https://develop3.dev.table.co/conversation/c34ed657-341b-4be2-a08a-4e575b363b7e
-
                     if (url != null && url.isNotEmpty()) {
                         conversationIdFromUrl(url)?.let {
                             this@DashboardActivity.tableId = it
