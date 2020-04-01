@@ -28,7 +28,7 @@ internal interface ApiInterface {
     fun register(@Body params: UserParamsModel): Call<RegisterResponseModel>
 
     @POST(API.CREATE_CONVERSATION)
-    fun createConversation(@Body blankObject: Map<String, String>): Call<CreateConversationResponseModel>
+    fun createConversation(@Body params: CreateConversationParamsModel): Call<CreateConversationResponseModel>
 
     @GET(API.GET_INSTALLATION_PROPERTIES)
     fun getInstallationProperties(): Call<InstallationPropertiesResponse>

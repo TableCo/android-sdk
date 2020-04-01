@@ -32,12 +32,12 @@ class MainActivity : AppCompatActivity(), TableLoginCallback {
         tableParams.firstName = "First"
         tableParams.lastName = "Last"
 
-        TableSDK.registerUser("my_user_id-2", tableParams,this)
+        TableSDK.registerUser("my_user_id", tableParams,this)
     }
 
     fun onRegisterAnonymous(view: View) {
         showProgressDialog(this)
-        TableSDK.registerUnidentifiedUser("anonymous_user_id-2", this)
+        TableSDK.registerUnidentifiedUser("anonymous_user_id", this)
     }
 
     override fun onSuccessLogin() {
