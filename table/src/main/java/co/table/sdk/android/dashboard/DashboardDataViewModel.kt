@@ -7,6 +7,7 @@ import co.table.sdk.android.jetpack.viewmodel.ObservableViewModel
 import co.table.sdk.android.network.API
 import co.table.sdk.android.network.ApiClient
 import co.table.sdk.android.network.ApiResponseInterface
+import co.table.sdk.android.network.models.CreateConversationParamsModel
 import co.table.sdk.android.network.models.CreateConversationResponseModel
 import retrofit2.Call
 import retrofit2.Response
@@ -53,6 +54,7 @@ internal class DashboardDataViewModel : ObservableViewModel() {
 
     fun createConversation(responseInterface: ApiResponseInterface) {
         val workspace = TableSDK.appSession.currentUser()?.workspace
+        val experienceShortCode = TableSDK.appSession.currentUser()?.experienceShortCode
         val token = TableSDK.appSession.currentUser()?.token
 
         if (workspace == null || token == null) {
@@ -61,7 +63,7 @@ internal class DashboardDataViewModel : ObservableViewModel() {
         }
 
         ApiClient().getRetrofitObject(workspace, token)
-                .createConversation(HashMap())
+                .createConversation(CreateConversationParamsModel(experienceShortCode))
                 .enqueue(object : Callback,
                         retrofit2.Callback<CreateConversationResponseModel> {
                     override fun onFailure(call: Call<CreateConversationResponseModel>, t: Throwable) {
