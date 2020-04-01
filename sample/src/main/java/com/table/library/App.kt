@@ -7,7 +7,8 @@ class App : Application() {
 
     override fun onCreate() {
         super.onCreate()
-        TableSDK.init(this, "https://develop3.dev.table.co","api_key", "6RVn7F")
+        TableSDK.init(this, "https://YOUR_WORKSPACE.table.co","api_key", "experience_short_code")
+
     }
 
 }
