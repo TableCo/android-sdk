@@ -23,7 +23,7 @@ import javax.security.auth.callback.Callback
 class TableSDK private constructor() {
 
     companion object {
-        internal val LOG_TAG = "Table SDK"
+        internal val LOG_TAG = "TableSDK"
         private var isDefaultLauncher: Boolean = false
         private var tableData: TableData = TableData()
         private val activityLifecycleWatcher = ActivityLifecycleWatcher()
