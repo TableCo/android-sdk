@@ -24,6 +24,18 @@ class MainActivity : AppCompatActivity(), TableLoginCallback {
         TableSDK.showConversationList(this)
     }
 
+    fun onRegisterAnonymous(view: View) {
+        showProgressDialog(this)
+        TableSDK.registerUnidentifiedUser(this)
+    }
+
+    fun onRegisterAnonymousPlusId(view: View) {
+        showProgressDialog(this)
+
+        val tableParams = UserParams()
+        TableSDK.registerUser("my_user_id", tableParams,this)
+    }
+
     fun onRegisterUser(view: View) {
         showProgressDialog(this)
 
@@ -33,11 +45,6 @@ class MainActivity : AppCompatActivity(), TableLoginCallback {
         tableParams.lastName = "Last"
 
         TableSDK.registerUser("my_user_id", tableParams,this)
-    }
-
-    fun onRegisterAnonymous(view: View) {
-        showProgressDialog(this)
-        TableSDK.registerUnidentifiedUser("anonymous_user_id", this)
     }
 
     override fun onSuccessLogin() {

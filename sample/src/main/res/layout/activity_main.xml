@@ -25,6 +25,12 @@
         <Button
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:onClick="onRegisterAnonymousPlusId"
+            android:text="Anonymous Plus ID" />
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:onClick="onRegisterAnonymous"
             android:text="Anonymous User" />
 
