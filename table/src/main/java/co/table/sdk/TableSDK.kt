@@ -23,7 +23,7 @@ import javax.security.auth.callback.Callback
 class TableSDK private constructor() {
 
     companion object {
-        internal val LOG_TAG = "Table SDK"
+        internal val LOG_TAG = "TableSDK"
         private var isDefaultLauncher: Boolean = false
         private var tableData: TableData = TableData()
         private val activityLifecycleWatcher = ActivityLifecycleWatcher()
@@ -40,8 +40,8 @@ class TableSDK private constructor() {
             updateTheme()
         }
 
-        fun registerUnidentifiedUser(userID: String, tableLoginCallback: TableLoginCallback?) {
-            registerUser(userID, UserParams(), false, tableLoginCallback)
+        fun registerUnidentifiedUser(tableLoginCallback: TableLoginCallback?) {
+            registerUser(null, UserParams(), false, tableLoginCallback)
         }
 
         fun registerUser(userID: String, userParams: UserParams, tableLoginCallback: TableLoginCallback?) {
@@ -124,7 +124,7 @@ class TableSDK private constructor() {
                     })
         }
 
-        private fun registerUser(userID: String, userParams: UserParams, validateUserParams: Boolean, tableLoginCallback: TableLoginCallback?) {
+        private fun registerUser(userID: String?, userParams: UserParams, validateUserParams: Boolean, tableLoginCallback: TableLoginCallback?) {
             tableData.userID = userID
             tableData.userParamsModel = UserParamsModel(userParams, userID, tableData.apiKey)
 
@@ -132,14 +132,8 @@ class TableSDK private constructor() {
                 tableLoginCallback?.onFailure(TABLE_ERROR_NO_WORKSPACE_ADDED, Common.errorMessageFromConstant(TABLE_ERROR_NO_WORKSPACE_ADDED))
             } else if (TextUtils.isEmpty(tableData.apiKey)) {
                 tableLoginCallback?.onFailure(TABLE_ERROR_API_KEY_EMPTY, Common.errorMessageFromConstant(TABLE_ERROR_API_KEY_EMPTY))
-            } else if (TextUtils.isEmpty(tableData.userID)) {
+            } else if (validateUserParams && TextUtils.isEmpty(tableData.userID)) {
                 tableLoginCallback?.onFailure(TABLE_ERROR_USER_ID_EMPTY, Common.errorMessageFromConstant(TABLE_ERROR_USER_ID_EMPTY))
-            } else if (validateUserParams && TextUtils.isEmpty(tableData.userParamsModel?.firstName)) {
-                tableLoginCallback?.onFailure(TABLE_ERROR_FIRST_NAME_EMPTY, Common.errorMessageFromConstant(TABLE_ERROR_FIRST_NAME_EMPTY))
-            } else if (validateUserParams && TextUtils.isEmpty(tableData.userParamsModel?.lastName)) {
-                tableLoginCallback?.onFailure(TABLE_ERROR_LAST_NAME_EMPTY, Common.errorMessageFromConstant(TABLE_ERROR_LAST_NAME_EMPTY))
-            } else if (validateUserParams && TextUtils.isEmpty(tableData.userParamsModel?.email)) {
-                tableLoginCallback?.onFailure(TABLE_ERROR_EMAIL_EMPTY, Common.errorMessageFromConstant(TABLE_ERROR_EMAIL_EMPTY))
             } else {
                 if (getTableData().userParamsModel != null) {
                     register(getTableData().userParamsModel!!, tableLoginCallback)

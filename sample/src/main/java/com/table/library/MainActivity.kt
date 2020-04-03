@@ -19,9 +19,13 @@ class MainActivity : AppCompatActivity(), TableLoginCallback {
         setContentView(R.layout.activity_main)
     }
 
-
     fun onLaunch(view: View) {
         TableSDK.showConversationList(this)
+    }
+
+    fun onRegisterAnonymous(view: View) {
+        showProgressDialog(this)
+        TableSDK.registerUnidentifiedUser(this)
     }
 
     fun onRegisterUser(view: View) {
@@ -33,11 +37,6 @@ class MainActivity : AppCompatActivity(), TableLoginCallback {
         tableParams.lastName = "Last"
 
         TableSDK.registerUser("my_user_id", tableParams,this)
-    }
-
-    fun onRegisterAnonymous(view: View) {
-        showProgressDialog(this)
-        TableSDK.registerUnidentifiedUser("anonymous_user_id", this)
     }
 
     override fun onSuccessLogin() {
@@ -56,7 +55,6 @@ class MainActivity : AppCompatActivity(), TableLoginCallback {
         dialog.show()
     }
 
-
     private fun showProgressDialog(context: Context) {
         try {
             if (progressDialog != null && progressDialog!!.isShowing) {
@@ -72,7 +70,6 @@ class MainActivity : AppCompatActivity(), TableLoginCallback {
         }
     }
 
-
     private fun dismissProgressDialog() {
         try {
             if (progressDialog != null && progressDialog!!.isShowing) {
@@ -82,5 +79,4 @@ class MainActivity : AppCompatActivity(), TableLoginCallback {
             e.printStackTrace()
         }
     }
-
 }
