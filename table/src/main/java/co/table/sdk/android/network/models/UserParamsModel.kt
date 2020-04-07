@@ -5,7 +5,7 @@ import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 import java.util.HashMap
 
-internal class UserParamsModel(userParams: UserParams, userId: String, apiKey: String) {
+internal class UserParamsModel(userParams: UserParams, userId: String?, apiKey: String) {
     @SerializedName("user_id")
     @Expose
     internal var userId: String? = userId
@@ -35,6 +35,8 @@ internal class UserParamsModel(userParams: UserParams, userId: String, apiKey: S
     var custom_attributes: Map<String, Any> = HashMap()
 
     init {
+        this.userId = userId
+        this.apiKey = apiKey
         this.email = userParams.email
         this.userHash = userParams.userHash
         this.firstName = userParams.firstName

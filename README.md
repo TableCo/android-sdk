@@ -17,7 +17,7 @@ allprojects {
 
 ```groovy
 dependencies {
-    implementation 'com.github.TableCo:android-sdk:0.2.0'
+    implementation 'com.github.TableCo:android-sdk:0.2.1'
 }
 ```
 
@@ -46,7 +46,7 @@ TableSDK.registerUser("my_user_id", tableParams, this)
 
 ### Register an Unidentified user anonymously
 ```kotlin
-TableSDK.registerUnidentifiedUser("anonymous_user_id", this)
+TableSDK.registerUnidentifiedUser(this)
 ```
 
 ### Sign Out
