@@ -39,6 +39,7 @@ internal class DashboardActivity : AppCompatActivity(), ApiResponseInterface {
     lateinit var dashboardDataViewModel: DashboardDataViewModel
     var webViewFileCallback: ValueCallback<Array<Uri>>? = null
     private var showNewMessageMenu = false
+    var initialUrl: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -118,7 +119,7 @@ internal class DashboardActivity : AppCompatActivity(), ApiResponseInterface {
                 super.doUpdateVisitedHistory(view, url, isReload)
 
                 // Only show the new message button when we're on the first conversation screen
-                dashboardDataViewModel.shouldShowNewMessage.value = url?.endsWith("/conversation") != false
+                dashboardDataViewModel.shouldShowNewMessage.value = url?.equals(initialUrl) != false
 
                 if (view!!.canGoBack()) {
                     if (url != null && url.isNotEmpty()) {
@@ -131,7 +132,6 @@ internal class DashboardActivity : AppCompatActivity(), ApiResponseInterface {
                             )
                         }
                     }
-
                 } else {
                     dashboardDataViewModel.headerTitle.value = getString(R.string.all_conversation)
                 }
@@ -168,6 +168,7 @@ internal class DashboardActivity : AppCompatActivity(), ApiResponseInterface {
             }
 
         }
+
         webView.addJavascriptInterface(object {
             @JavascriptInterface
             fun videocall(sessionId: String, token: String) {
@@ -179,7 +180,13 @@ internal class DashboardActivity : AppCompatActivity(), ApiResponseInterface {
                 startActivity(intent)
             }
         }, "mobile")
-        writeData()
+
+        val currentUser = TableSDK.appSession.currentUser()
+        val tokenValue: String = currentUser!!.token!!
+
+        // Load the fist page, passing the token
+        initialUrl = TableSDK.appSession.currentUser()?.workspace + "/conversation?webview=android&token=" + tokenValue
+        webView.loadUrl(initialUrl)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -233,24 +240,6 @@ internal class DashboardActivity : AppCompatActivity(), ApiResponseInterface {
             webView.goBack()
         } else {
             super.onBackPressed()
-        }
-    }
-
-    fun writeData() {
-        val keyToken = "authToken"
-        val currentUser = TableSDK.appSession.currentUser()
-        val tokenValue: String = currentUser!!.token!!
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            webView.evaluateJavascript(
-                "window.localStorage.setItem('$keyToken','$tokenValue');",
-                {
-                    webView.loadUrl(TableSDK.appSession.currentUser()?.workspace + "/table?webview=android&token=" + tokenValue)
-                }
-            )
-        } else {
-            webView.loadUrl("javascript:localStorage.setItem('$keyToken','$tokenValue');")
-            webView.loadUrl(TableSDK.appSession.currentUser()?.workspace + "/table?webview=android&token=" + tokenValue)
         }
     }
 
