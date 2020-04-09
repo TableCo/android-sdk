@@ -39,7 +39,7 @@ internal class DashboardActivity : AppCompatActivity(), ApiResponseInterface {
     lateinit var dashboardDataViewModel: DashboardDataViewModel
     var webViewFileCallback: ValueCallback<Array<Uri>>? = null
     private var showNewMessageMenu = false
-    var initialUrl: String? = null
+    private var initialUrl: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
