@@ -17,7 +17,7 @@ allprojects {
 
 ```groovy
 dependencies {
-    implementation 'com.github.TableCo:android-sdk:0.2.1'
+    implementation 'com.github.TableCo:android-sdk:0.2.2'
 }
 ```
 
