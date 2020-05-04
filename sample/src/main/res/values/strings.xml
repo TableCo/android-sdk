@@ -1,3 +1,6 @@
 <resources>
     <string name="app_name">Table SDK Sample</string>
+    <string name="default_notification_channel_id">24</string>
+    <string name="table_notification_channel_name">Example Table notification channel</string>
+    <string name="table_notification_channel">123</string>
 </resources>

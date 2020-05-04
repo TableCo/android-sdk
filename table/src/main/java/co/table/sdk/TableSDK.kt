@@ -16,6 +16,8 @@ import co.table.sdk.android.network.models.UserParamsModel
 import co.table.sdk.android.session.ActivityLifecycleWatcher
 import co.table.sdk.android.session.AppSession
 import co.table.sdk.android.session.Session
+import com.google.firebase.iid.FirebaseInstanceId
+import com.google.firebase.messaging.RemoteMessage
 import retrofit2.Call
 import retrofit2.Response
 import javax.security.auth.callback.Callback
@@ -30,10 +32,11 @@ class TableSDK private constructor() {
         private var initialApplicationContext: Context? = null;
         internal val appSession: AppSession = Session()
 
-        fun init(application: Application, workspaceUrl: String, apiKey: String, experienceShortCode: String? = null) {
+        fun init(application: Application, workspaceUrl: String, apiKey: String, experienceShortCode: String? = null, fcmNotificationChannel: String? = null) {
             tableData.workspaceUrl = workspaceUrl
             tableData.apiKey = apiKey
             tableData.experienceShortCode = experienceShortCode
+            tableData.fcmNotificationChannel = fcmNotificationChannel
             initialApplicationContext = application.applicationContext
             application.registerActivityLifecycleCallbacks(activityLifecycleWatcher)
 
@@ -64,6 +67,18 @@ class TableSDK private constructor() {
             appSession.logout()
         }
 
+        fun updateFcmToken(token: String) {
+            doUpdateFcmToken(token)
+        }
+
+        fun handlePushMessage(remoteMessage: RemoteMessage) {
+
+        }
+
+        fun isTablePushMessage(remoteMessage: RemoteMessage): Boolean {
+            return false
+        }
+
         internal fun getTableData(): TableData {
             return tableData
         }
@@ -91,7 +106,9 @@ class TableSDK private constructor() {
                             registerResponse.user?.let {
                                 it.workspace = tableData.workspaceUrl
                                 it.experienceShortCode = tableData.experienceShortCode
+                                it.fcmNotificationChannel = tableData.fcmNotificationChannel
                                 appSession.saveSession(it)
+                                doUpdateFcmToken()
                                 tableLoginCallback?.onSuccessLogin()
                             }
                         } else {
@@ -122,6 +139,18 @@ class TableSDK private constructor() {
                             }
                         }
                     })
+        }
+
+        private fun doUpdateFcmToken(token: String? = null) {
+            if (appSession.isAuthenticated()) {
+                if (token != null && token.isNotEmpty()) {
+                    appSession.updateFcmToken(token, appSession.currentUser()?.fcmNotificationChannel)
+                } else {
+                    FirebaseInstanceId.getInstance().instanceId.addOnSuccessListener {
+                        appSession.updateFcmToken(it.token, appSession.currentUser()?.fcmNotificationChannel)
+                    }
+                }
+            }
         }
 
         private fun registerUser(userID: String?, userParams: UserParams, validateUserParams: Boolean, tableLoginCallback: TableLoginCallback?) {

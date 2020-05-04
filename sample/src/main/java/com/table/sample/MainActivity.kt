@@ -1,4 +1,4 @@
-package com.table.library
+package com.table.sample
 
 import android.app.ProgressDialog
 import android.content.Context

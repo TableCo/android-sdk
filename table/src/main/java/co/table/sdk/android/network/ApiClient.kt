@@ -9,6 +9,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
 
 internal class ApiClient {
+
     fun getRetrofitObject(workspaceUrl:String?, authToken: String?): ApiInterface {
         val interceptor = HttpLoggingInterceptor()
         interceptor.level = HttpLoggingInterceptor.Level.BODY
@@ -37,4 +38,5 @@ internal class ApiClient {
             .build()
         return retrofit.create(ApiInterface::class.java)
     }
+
 }

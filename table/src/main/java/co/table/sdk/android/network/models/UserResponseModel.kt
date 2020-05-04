@@ -25,4 +25,7 @@ internal class UserResponseModel {
     @SerializedName("experience_short_code")
     @Expose
     var experienceShortCode: String? = null
+    @SerializedName("fcm_notification_channel")
+    @Expose
+    var fcmNotificationChannel: String? = null
 }

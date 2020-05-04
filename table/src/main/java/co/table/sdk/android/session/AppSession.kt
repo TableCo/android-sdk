@@ -7,4 +7,5 @@ internal interface AppSession {
     fun isAuthenticated(): Boolean
     fun logout()
     fun saveSession(user: UserResponseModel)
+    fun updateFcmToken(token: String, channel: String?)
 }
