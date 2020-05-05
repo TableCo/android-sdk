@@ -1,4 +1,4 @@
-package com.table.library
+package com.table.sample
 
 import org.junit.Test
 
