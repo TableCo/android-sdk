@@ -34,7 +34,7 @@ class TableSDK private constructor() {
         internal val appSession: AppSession = Session()
 
         fun init(application: Application, workspaceUrl: String, apiKey: String, experienceShortCode: String? = null, fcmNotificationChannel: String? = null) {
-            tableData.workspaceUrl = workspaceUrl
+            tableData.workspaceUrl = validWorkspaceUrl(workspaceUrl)
             tableData.apiKey = apiKey
             tableData.experienceShortCode = experienceShortCode
             tableData.fcmNotificationChannel = fcmNotificationChannel
@@ -195,6 +195,32 @@ class TableSDK private constructor() {
                     tableLoginCallback?.onFailure(TABLE_ERROR_GENERAL, "Inconsistent data during registration")
                 }
             }
+        }
+
+        private fun validWorkspaceUrl(workspaceUrl: String): String {
+            var validWorkspace = workspaceUrl
+
+            // Make sure we're on https protocol identifier
+            if (!validWorkspace.contains("http")) {
+                validWorkspace = "https://$validWorkspace"
+            }
+
+            // If the developer used just their table ID then add the standard table domain
+            if (!validWorkspace.contains(".")) {
+                validWorkspace = "$validWorkspace.table.co"
+            }
+
+            // Don't want double trailing slashes
+            if (validWorkspace.endsWith("//")) {
+                validWorkspace = validWorkspace.substring(0, validWorkspace.length - 1)
+            }
+
+            // Make sure we never end with the trailing slash
+            if (validWorkspace.endsWith("/")) {
+                validWorkspace = validWorkspace.substring(0, validWorkspace.length - 1)
+            }
+
+            return validWorkspace
         }
     }
 
