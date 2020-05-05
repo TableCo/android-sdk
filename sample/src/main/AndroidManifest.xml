@@ -44,10 +44,10 @@
             android:resource="@color/colorAccent" />
 
         <!-- Default notification channel for the app's normal notifications.
-             Table can use a different notification channel if required. -->
-<!--        <meta-data-->
-<!--            android:name="com.google.firebase.messaging.default_notification_channel_id"-->
-<!--            android:value="@string/default_notification_channel_id" />-->
+             Table can use a different notification channel if required, which is currently set to '123'. -->
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_channel_id"
+            android:value="@string/default_notification_channel_id" />
 
     </application>
 

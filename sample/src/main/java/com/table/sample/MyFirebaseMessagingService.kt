@@ -5,8 +5,6 @@ import android.util.Log
 import co.table.sdk.TableSDK
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
-import io.intercom.android.sdk.push.IntercomPushClient
-
 
 class MyFirebaseMessagingService: FirebaseMessagingService() {
 
