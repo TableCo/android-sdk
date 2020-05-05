@@ -13,20 +13,7 @@ class App : Application() {
     override fun onCreate() {
         super.onCreate()
 
-//        var channel: NotificationChannel? = null
-//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-//            channel = NotificationChannel(
-//                getString(R.string.table_notification_channel),
-//                getString(R.string.table_notification_channel_name),
-//                NotificationManager.IMPORTANCE_DEFAULT
-//            )
-//            if (getSystemService(Context.NOTIFICATION_SERVICE) != null) {
-//                val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-//                notificationManager.createNotificationChannel(channel)
-//            }
-//        }
-
-        TableSDK.init(this, "https://develop4.dev.table.co","978fQmN5ReV3vPKclQgHEg", null, getString(R.string.table_notification_channel))
+        TableSDK.init(this, "https://YOUR_WORKSPACE.table.co","your_api_key", null, getString(R.string.table_notification_channel))
     }
 
 }
