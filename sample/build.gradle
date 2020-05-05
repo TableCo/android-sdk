@@ -36,9 +36,8 @@ dependencies {
     // Switch between the local library and the public library here:
     // See https://jitpack.io/#TableCo/android-sdk/ for the latest versions
     implementation project(':table')
-//    implementation 'com.github.TableCo:android-sdk:0.1.1'
+    //    implementation 'com.github.TableCo:android-sdk:0.1.1'
 
-    implementation 'io.intercom.android:intercom-sdk:6.+' //************************************
     implementation 'com.google.firebase:firebase-messaging:20.1.6'
 
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"

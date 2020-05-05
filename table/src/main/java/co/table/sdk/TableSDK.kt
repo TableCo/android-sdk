@@ -3,6 +3,7 @@ package co.table.sdk
 import android.app.Application
 import android.content.Context
 import android.content.Intent
+import android.os.Bundle
 import android.text.TextUtils
 import android.util.Log
 import co.table.sdk.android.config.*
@@ -63,6 +64,30 @@ class TableSDK private constructor() {
             }
         }
 
+        fun showConversationForRemoteMessage(remoteMessage: RemoteMessage) {
+            val tableId = remoteMessage.data["table_id"] ?: return
+            val context = activityLifecycleWatcher.currentActivity ?: return
+
+            if (appSession.isAuthenticated()) {
+                val intent = Intent(context, DashboardActivity::class.java)
+                intent.putExtra(DashboardActivity.EXTRA_COLOR_INT, tableData.themeColor)
+                intent.putExtra(DashboardActivity.EXTRA_CONVERSATION_ID, tableId)
+                context.startActivity(intent)
+            }
+        }
+
+        fun showConversationForBundle(bundle: Bundle) {
+            val tableId = bundle["table_id"] as? String ?: return
+            val context = activityLifecycleWatcher.currentActivity ?: return
+
+            if (appSession.isAuthenticated()) {
+                val intent = Intent(context, DashboardActivity::class.java)
+                intent.putExtra(DashboardActivity.EXTRA_COLOR_INT, tableData.themeColor)
+                intent.putExtra(DashboardActivity.EXTRA_CONVERSATION_ID, tableId)
+                context.startActivity(intent)
+            }
+        }
+
         fun logout() {
             appSession.logout()
         }
@@ -71,12 +96,12 @@ class TableSDK private constructor() {
             doUpdateFcmToken(token)
         }
 
-        fun handlePushMessage(remoteMessage: RemoteMessage) {
-
+        fun isTablePushMessage(remoteMessage: RemoteMessage): Boolean {
+            return remoteMessage.data.containsKey("table_id")
         }
 
-        fun isTablePushMessage(remoteMessage: RemoteMessage): Boolean {
-            return false
+        fun isTablePushMessage(bundle: Bundle): Boolean {
+            return bundle.containsKey("table_id")
         }
 
         internal fun getTableData(): TableData {
