@@ -21,7 +21,7 @@ dependencies {
 }
 ```
 
-# Usage
+# Standard Usage
 
 ### Initialise the SDK
 
@@ -57,4 +57,101 @@ TableSDK.logout()
 ### Show the Table conversation list to the user using the navigator
 ```kotlin
 TableSDK.showConversationList(this);
+```
+
+# Enable Firebase Cloud Messaging support
+
+## Firebase Setup
+
+If you're not using Firebase at all yet, you might also want to check out the [Android integration guide](https://firebase.google.com/docs/android/setup) on the official Firebase documentation.  
+
+If you're not currently using Firebase Cloud Messaging then you'll need to set this up for your app. This process is [described in detail here](https://firebase.google.com/docs/cloud-messaging/android/client) in the official documentation. 
+
+## Table Integration
+
+The TableSDK APIs are design to work alongside your own push implementation or the implementation used by other 3rd party SDKs. We provide the `TableSDK.isTablePush()` methods to allow you to check incoming messages against our support for them. The Table SDK will then display the incoming message at a time that suits your app UI by calling `TableSDK.showConversation()`.
+
+### Incoming Messages while the App is Open
+
+These messages will appear in your `FirebaseMessagingService` implementation. You can find an example of this in the sample app [here](https://github.com/TableCo/android-sdk/blob/master/sample/src/main/java/com/table/sample/MyFirebaseMessagingService.kt).
+
+```kotlin
+override fun onMessageReceived(remoteMessage: RemoteMessage) {
+    val message = remoteMessage.data
+
+    if (TableSDK.isTablePushMessage(remoteMessage)) {
+        // Let our MainActivity know about the incoming message and we can deal with it appropriately
+        val intent = Intent()
+        intent.action = MainActivity.NOTIFICATION_INTENT_FILTER
+        intent.putExtra(MainActivity.EXTRA_REMOTE_MESSAGE, remoteMessage)
+        sendBroadcast(intent)
+    }
+
+    // Deal with app-specific messages or messages from other services here
+
+    super.onMessageReceived(remoteMessage)
+}
+```
+
+It's up to you to decide what to do with these messages and when best to inform the user. The suggested implementation sends a broadcast message back to the main activity, which is important as these messages are not guaranteed to run on the main UI thread.
+
+This message is then picked-up by the Activity like so:
+
+```kotlin
+override fun onResume() {
+    super.onResume()
+
+    val intentFilter = IntentFilter(NOTIFICATION_INTENT_FILTER)
+    broadcastReceiver = object : BroadcastReceiver() {
+
+        // This is where we get informed of new FCM messages from MyFirebaseMessagingService
+        override fun onReceive(context: Context, intent: Intent) {
+            // Get message from intent
+            val message = intent.getParcelableExtra<RemoteMessage>(EXTRA_REMOTE_MESSAGE)
+            message?.let {
+                if (TableSDK.isTablePushMessage(it)) {
+                    // Let's ask the user if they'd like to deal with it first
+                    val alert = AlertDialog.Builder(context)
+                    alert.setTitle("Incoming Message")
+                    alert.setMessage("You have a new support message from our staff")
+                    alert.setPositiveButton("Read it") { _, _ ->
+                        TableSDK.showConversation(it)
+                    }
+                    alert.setNeutralButton("Cancel") { _, _ -> }
+                    alert.show()
+                }
+
+                // Deal with app-specific messages or messages from other services here
+            }
+        }
+    }
+
+    registerReceiver(broadcastReceiver, intentFilter)
+}
+```
+
+### Handling Messages while the App is Closed or Suspended
+
+These messages will be sent to your app's main activity. A sample implementation can be see in the sample app [here](https://github.com/TableCo/android-sdk/blob/develop/sample/src/main/java/com/table/sample/MainActivity.kt#L33). Again in this instance we simply inform that the message is available and let them navigate to it if they wish.
+
+```kotlin
+override fun onCreate(savedInstanceState: Bundle?) {
+    super.onCreate(savedInstanceState)
+    setContentView(R.layout.activity_main)
+
+    // See if we were launched from a notification while the app was in the background
+    intent.extras?.let {
+        if (TableSDK.isTablePushMessage(it)) {
+            // Let's ask the user if they'd like to deal with it first
+            val alert = AlertDialog.Builder(this)
+            alert.setTitle("Incoming Message")
+            alert.setMessage("You have a new support message from our staff")
+            alert.setPositiveButton("Read it") { _, _ ->
+                TableSDK.showConversation(it)
+            }
+            alert.setNeutralButton("Cancel") { _, _ -> }
+            alert.show()
+        }
+    }
+}
 ```
