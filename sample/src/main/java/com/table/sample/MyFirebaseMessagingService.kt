@@ -10,7 +10,6 @@ class MyFirebaseMessagingService: FirebaseMessagingService() {
 
     override fun onMessageReceived(remoteMessage: RemoteMessage) {
         val message = remoteMessage.data
-        Log.d("TableSample", "onMessageReceived - $message")
 
         if (TableSDK.isTablePushMessage(remoteMessage)) {
             // Let our MainActivity know about the incoming message and we can deal with it appropriately

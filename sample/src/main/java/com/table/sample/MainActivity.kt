@@ -36,7 +36,7 @@ class MainActivity : AppCompatActivity(), TableLoginCallback {
                 alert.setTitle("Incoming Message")
                 alert.setMessage("You have a new support message from our staff")
                 alert.setPositiveButton("Read it") { _, _ ->
-                    TableSDK.showConversationForBundle(it)
+                    TableSDK.showConversation(it)
                 }
                 alert.setNeutralButton("Cancel") { _, _ -> }
                 alert.show()
@@ -61,7 +61,7 @@ class MainActivity : AppCompatActivity(), TableLoginCallback {
                         alert.setTitle("Incoming Message")
                         alert.setMessage("You have a new support message from our staff")
                         alert.setPositiveButton("Read it") { _, _ ->
-                            TableSDK.showConversationForRemoteMessage(it)
+                            TableSDK.showConversation(it)
                         }
                         alert.setNeutralButton("Cancel") { _, _ -> }
                         alert.show()

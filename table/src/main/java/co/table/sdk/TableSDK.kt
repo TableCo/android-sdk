@@ -64,7 +64,7 @@ class TableSDK private constructor() {
             }
         }
 
-        fun showConversationForRemoteMessage(remoteMessage: RemoteMessage) {
+        fun showConversation(remoteMessage: RemoteMessage) {
             val tableId = remoteMessage.data["table_id"] ?: return
             val context = activityLifecycleWatcher.currentActivity ?: return
 
@@ -76,7 +76,7 @@ class TableSDK private constructor() {
             }
         }
 
-        fun showConversationForBundle(bundle: Bundle) {
+        fun showConversation(bundle: Bundle) {
             val tableId = bundle["table_id"] as? String ?: return
             val context = activityLifecycleWatcher.currentActivity ?: return
 
