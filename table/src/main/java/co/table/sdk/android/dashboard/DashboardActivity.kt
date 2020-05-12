@@ -30,7 +30,8 @@ import kotlinx.android.synthetic.main.activity_dashboard.*
 internal class DashboardActivity : AppCompatActivity(), ApiResponseInterface {
 
     companion object {
-        val EXTRA_COLOR_INT = "color"
+        const val EXTRA_COLOR_INT = "color"
+        const val EXTRA_CONVERSATION_ID = "conversation_id"
     }
 
     private val FILECHOOSER_RESULTCODE = 101
@@ -48,6 +49,8 @@ internal class DashboardActivity : AppCompatActivity(), ApiResponseInterface {
         )
         dashboardDataViewModel = ViewModelProviders.of(this).get(DashboardDataViewModel::class.java)
         dashboardDataViewModel.themeColorInt = intent.getIntExtra(EXTRA_COLOR_INT, 0)
+        dashboardDataViewModel.initialConversationId = intent.getStringExtra(EXTRA_CONVERSATION_ID)
+
         ApiLifeCycle(this, this, dashboardDataViewModel)
         binding.dashboardViewModel = dashboardDataViewModel
         binding.lifecycleOwner = this
@@ -185,7 +188,11 @@ internal class DashboardActivity : AppCompatActivity(), ApiResponseInterface {
         val tokenValue: String = currentUser!!.token!!
 
         // Load the fist page, passing the token
-        initialUrl = TableSDK.appSession.currentUser()?.workspace + "/conversation?webview=android&token=" + tokenValue
+        initialUrl = if (dashboardDataViewModel.initialConversationId != null) {
+            TableSDK.appSession.currentUser()?.workspace + "/conversation/${dashboardDataViewModel.initialConversationId}?webview=android&token=$tokenValue"
+        } else {
+            TableSDK.appSession.currentUser()?.workspace + "/conversation?webview=android&token=$tokenValue"
+        }
         webView.loadUrl(initialUrl)
     }
 

@@ -18,7 +18,8 @@ internal class DashboardDataViewModel : ObservableViewModel() {
     var headerResponseModel = MutableLiveData<HeaderResponseModel>()
     var headerTitle = MutableLiveData<String>()
     var shouldShowNewMessage = MutableLiveData(false)
-    @ColorInt var themeColorInt = 0;
+    @ColorInt var themeColorInt = 0
+    var initialConversationId: String? = null
 
     fun getHeader(tableId: String, apiTag: String, responseInterface: ApiResponseInterface) {
         val workspace = TableSDK.appSession.currentUser()?.workspace
