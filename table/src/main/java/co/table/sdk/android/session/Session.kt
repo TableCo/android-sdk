@@ -57,7 +57,11 @@ internal class Session() : AppSession {
 
         val tokenRequestModel = TokenRequestModel()
         tokenRequestModel.contact_fcm_device_token = token
-        channel?.let { tokenRequestModel.contact_fcm_notfication_channel = it }
+        channel?.let { 
+            tokenRequestModel.contact_fcm_notification_channel = it
+            tokenRequestModel.contact_fcm_notfication_channel = it
+        }
+
 
         ApiClient().getRetrofitObject(
             currentUser()!!.workspace,
