@@ -20,8 +20,8 @@ android {
         }
         manifestPlaceholders = [
             JPUSH_PKGNAME : applicationId,
-            JPUSH_APPKEY : "0310e26cf6f5e91f03479c3c",
-            JPUSH_CHANNEL : "default",
+            JPUSH_APPKEY : "YOUR_APP_KEY",
+            JPUSH_CHANNEL : "YOUR_JPUSH_CHANNEL",
         ]
     }
     buildTypes {

@@ -35,6 +35,7 @@ class MainActivity : AppCompatActivity(), TableLoginCallback {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        //JPush Setup
         JPushInterface.setDebugMode(true)
         JPushInterface.init(this)
         val regId = JPushInterface.getRegistrationID(this);
@@ -42,12 +43,13 @@ class MainActivity : AppCompatActivity(), TableLoginCallback {
             TableSDK.updateJPushRegistrationId(regId)
         }
 
+        //Handling JPush notification on launch of MainActivity from background
         val jpushNotification = intent.getBundleExtra(JPUSH_NOTIFICATION)
         if (jpushNotification != null) {
             handleJPushNotification(jpushNotification, this)
         }
 
-        // See if we were launched from a notification while the app was in the background
+        // See if we were launched from a firebase notification while the app was in the background
         intent.extras?.let {
             //This deals with Firebase Notifications
             if (TableSDK.isTablePushMessage(it)) {
@@ -90,7 +92,7 @@ class MainActivity : AppCompatActivity(), TableLoginCallback {
             }
         }
 
-//        registerReceiver(firebaseBroadcastReceiver, intentFilter)
+
 
 
         //This handles the broadcast from the JPushReceiver to the main activity.
@@ -101,6 +103,9 @@ class MainActivity : AppCompatActivity(), TableLoginCallback {
                 handleJPushNotification(jpushNotification, context)
             }
         }
+
+        //We can either register the firebase receiver or both the JPush receivers
+        //registerReceiver(firebaseBroadcastReceiver, intentFilter)
 
         jPushReceiver = JPushReceiver()
         //This is the receiver for getting the notifications from JPush
