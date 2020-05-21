@@ -155,11 +155,11 @@ class MainActivity : AppCompatActivity(), TableLoginCallback {
         showProgressDialog(this)
 
         val tableParams = UserParams()
-        tableParams.email = "jackwalkerandroid@gmail.com"
-        tableParams.firstName = "Jackwalker"
+        tableParams.email = "app-user-@gmail.com"
+        tableParams.firstName = "Your"
         tableParams.lastName = "User"
 
-        TableSDK.registerUser("jackwalker128", tableParams,this)
+        TableSDK.registerUser("USER_ID", tableParams,this)
     }
 
     override fun onSuccessLogin() {
