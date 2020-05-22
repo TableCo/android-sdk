@@ -1,6 +1,7 @@
 package co.table.sdk
 
 import android.app.Application
+import android.app.NotificationChannel
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
@@ -19,6 +20,7 @@ import co.table.sdk.android.session.AppSession
 import co.table.sdk.android.session.Session
 import com.google.firebase.iid.FirebaseInstanceId
 import com.google.firebase.messaging.RemoteMessage
+import com.google.gson.JsonObject
 import retrofit2.Call
 import retrofit2.Response
 import javax.security.auth.callback.Callback
@@ -33,11 +35,12 @@ class TableSDK private constructor() {
         private var initialApplicationContext: Context? = null;
         internal val appSession: AppSession = Session()
 
-        fun init(application: Application, workspaceUrl: String, apiKey: String, experienceShortCode: String? = null, fcmNotificationChannel: String? = null) {
+        fun init(application: Application, workspaceUrl: String, apiKey: String, experienceShortCode: String? = null, fcmNotificationChannel: String? = null, jpushNotificationChannel: String? = null) {
             tableData.workspaceUrl = validWorkspaceUrl(workspaceUrl)
             tableData.apiKey = apiKey
             tableData.experienceShortCode = experienceShortCode
             tableData.fcmNotificationChannel = fcmNotificationChannel
+            tableData.jpushNotificationChannel = jpushNotificationChannel
             initialApplicationContext = application.applicationContext
             application.registerActivityLifecycleCallbacks(activityLifecycleWatcher)
 
@@ -88,6 +91,18 @@ class TableSDK private constructor() {
             }
         }
 
+        fun showConversation(jsonObject: JsonObject) {
+            val tableId = jsonObject.get("table_id").asString ?: return
+            val context = activityLifecycleWatcher.currentActivity ?: return
+
+            if (appSession.isAuthenticated()) {
+                val intent = Intent(context, DashboardActivity::class.java)
+                intent.putExtra(DashboardActivity.EXTRA_COLOR_INT, tableData.themeColor)
+                intent.putExtra(DashboardActivity.EXTRA_CONVERSATION_ID, tableId)
+                context.startActivity(intent)
+            }
+        }
+
         fun logout() {
             appSession.logout()
         }
@@ -96,12 +111,20 @@ class TableSDK private constructor() {
             doUpdateFcmToken(token)
         }
 
+        fun updateJPushRegistrationId(registrationId: String) {
+            doUpdateJPushRegistrationId(registrationId)
+        }
+
         fun isTablePushMessage(remoteMessage: RemoteMessage): Boolean {
             return remoteMessage.data.containsKey("table_id")
         }
 
         fun isTablePushMessage(bundle: Bundle): Boolean {
             return bundle.containsKey("table_id")
+        }
+
+        fun isTablePushMessage(jsonObject: JsonObject): Boolean {
+            return jsonObject.has("table_id")
         }
 
         internal fun getTableData(): TableData {
@@ -132,6 +155,7 @@ class TableSDK private constructor() {
                                 it.workspace = tableData.workspaceUrl
                                 it.experienceShortCode = tableData.experienceShortCode
                                 it.fcmNotificationChannel = tableData.fcmNotificationChannel
+                                it.jpushNotificationChannel = tableData.jpushNotificationChannel
                                 appSession.saveSession(it)
                                 doUpdateFcmToken()
                                 tableLoginCallback?.onSuccessLogin()
@@ -174,6 +198,14 @@ class TableSDK private constructor() {
                     FirebaseInstanceId.getInstance().instanceId.addOnSuccessListener {
                         appSession.updateFcmToken(it.token, appSession.currentUser()?.fcmNotificationChannel)
                     }
+                }
+            }
+        }
+
+        private fun doUpdateJPushRegistrationId(registrationId: String? = null) {
+            if (appSession.isAuthenticated()) {
+                if (registrationId != null && registrationId.isNotEmpty()) {
+                    appSession.updateJPushRegistrationId(registrationId, appSession.currentUser()?.jpushNotificationChannel)
                 }
             }
         }

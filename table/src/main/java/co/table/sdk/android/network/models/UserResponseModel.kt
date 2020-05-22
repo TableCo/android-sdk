@@ -28,4 +28,7 @@ internal class UserResponseModel {
     @SerializedName("fcm_notification_channel")
     @Expose
     var fcmNotificationChannel: String? = null
+    @SerializedName("jpush_notification_channel")
+    @Expose
+    var jpushNotificationChannel: String? = null
 }

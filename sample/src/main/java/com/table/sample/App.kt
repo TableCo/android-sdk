@@ -27,7 +27,7 @@ class App : Application() {
             }
         }
 
-        TableSDK.init(this, "https://YOUR_WORKSPACE.table.co","your_api_key", null, getString(R.string.table_notification_channel))
+        TableSDK.init(this, "YOUR_WORKSPACE_URL","YOUR_API_KEY", null, getString(R.string.table_notification_channel))
     }
 
 }
