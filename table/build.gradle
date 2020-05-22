@@ -55,6 +55,8 @@ dependencies {
     implementation 'com.opentok.android:opentok-android-sdk:2.16.6'
     implementation group: 'javax.xml.bind', name: 'jaxb-api', version: '2.3.1'
     implementation 'com.google.firebase:firebase-messaging:20.1.6'
+    implementation 'cn.jiguang.sdk:jpush:3.1.1'
+    implementation 'cn.jiguang.sdk:jcore:1.1.9'
 //    implementation 'com.google.firebase:firebase-messaging:20.1.0'
 //    implementation 'com.google.firebase:firebase-analytics:17.2.2'
 }

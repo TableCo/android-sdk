@@ -155,3 +155,66 @@ override fun onCreate(savedInstanceState: Bundle?) {
     }
 }
 ```
+
+# JPush Notifications
+
+## JPush Setup
+
+If you haven't already set up JPush for your app, you will need to do so by following the documentation [here](https://docs.jiguang.cn/en/jpush/client/Android/android_guide/).
+
+## JPush Registration ID
+
+To start receiving JPush Notifications from your Table conversations, you will need to send your device's JPush Registration ID to our server. You can get the Registration ID from JPush using the method: 
+```
+JPushInterface.getRegistrationID(context)
+```
+
+You can then pass the result of this method to our server using the method:
+```
+TableSDK.updateJPushRegistrationId(registrationId)
+```
+
+## Receiving JPush Notifications
+
+To receive JPush notifications, you will need to create a class that extends a BroadcastReceiver and reference it in your AndroidManifest like so:
+```
+<receiver
+    android:name="CLASS_NAME"
+    android:enabled="true">
+    <intent-filter>
+        <action android:name="cn.jpush.android.intent.REGISTRATION" />
+        <action android:name="cn.jpush.android.intent.MESSAGE_RECEIVED" />
+        <action android:name="cn.jpush.android.intent.NOTIFICATION_RECEIVED" />
+        <action android:name="cn.jpush.android.intent.NOTIFICATION_OPENED" />
+        <action android:name="cn.jpush.android.intent.CONNECTION" />
+        <category android:name="YOUR_PACKAGE_NAME" />
+    </intent-filter>
+</receiver>
+```
+Then you can check for the action type in the onReceive method in your class like so:
+```
+override fun onReceive(context: Context?, intent: Intent) {
+        val bundle = intent.extras
+
+        if (JPushInterface.ACTION_REGISTRATION_ID == intent.action) {
+            Log.d(TAG, "JPush Registration ID")
+        } else if (JPushInterface.ACTION_NOTIFICATION_RECEIVED == intent.action) {
+            Log.d(TAG, "Notification Received")
+        } else if (JPushInterface.ACTION_NOTIFICATION_OPENED == intent.action) {
+            Log.d(TAG, "Notification Opened")
+        } else {
+            Log.d(TAG, "Unhandled intent - " + intent.action)
+        }
+    }
+```
+
+To check that the JPush notification you received is a Table notification, you can pass the bundle variable from the onReceive method to our SDK method:
+```
+TableSDK.isTablePushMessageJPush(bundle)
+```
+
+If the notification is a Table notification, you can show the conversation using the method:
+```
+TableSDK.showConversationJPush(bundle)
+```
+

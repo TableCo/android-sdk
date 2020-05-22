@@ -128,21 +128,16 @@ class MainActivity : AppCompatActivity(), TableLoginCallback {
 
     fun handleJPushNotification(bundle: Bundle?, context: Context) {
         bundle?.let {
-            val jPushExtras = it.get(JPushInterface.EXTRA_EXTRA)
-            if (jPushExtras != null && jPushExtras is String) {
-                //If we have jPushExtras, then we're looking at a JPush Notification
-                val jsonFromString = Gson().fromJson(jPushExtras, JsonObject::class.java)
-                if (TableSDK.isTablePushMessage(jsonFromString)) {
-                    // Let's ask the user if they'd like to deal with it first
-                    val alert = AlertDialog.Builder(context)
-                    alert.setTitle("Incoming Message")
-                    alert.setMessage("You have a new support message from our staff")
-                    alert.setPositiveButton("Read it") { _, _ ->
-                        TableSDK.showConversation(jsonFromString)
-                    }
-                    alert.setNeutralButton("Cancel") { _, _ -> }
-                    alert.show()
+            if (TableSDK.isTablePushMessageJPush(bundle)) {
+                // Let's ask the user if they'd like to deal with it first
+                val alert = AlertDialog.Builder(context)
+                alert.setTitle("Incoming Message")
+                alert.setMessage("You have a new support message from our staff")
+                alert.setPositiveButton("Read it") { _, _ ->
+                    TableSDK.showConversationJPush(bundle)
                 }
+                alert.setNeutralButton("Cancel") { _, _ -> }
+                alert.show()
             }
         }
     }
