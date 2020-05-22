@@ -5,6 +5,8 @@ import co.table.sdk.TableSDK.Companion.LOG_TAG
 import co.table.sdk.TableSDK.Companion.applicationContext
 import co.table.sdk.android.constants.PrefUtils
 import co.table.sdk.android.network.ApiClient
+import co.table.sdk.android.network.models.*
+import co.table.sdk.android.network.models.JPushRegistrationIdRequestModel
 import co.table.sdk.android.network.models.TokenRequestModel
 import co.table.sdk.android.network.models.TokenResponseModel
 import co.table.sdk.android.network.models.UserResponseModel
@@ -57,7 +59,11 @@ internal class Session() : AppSession {
 
         val tokenRequestModel = TokenRequestModel()
         tokenRequestModel.contact_fcm_device_token = token
-        channel?.let { tokenRequestModel.contact_fcm_notfication_channel = it }
+        channel?.let { 
+            tokenRequestModel.contact_fcm_notification_channel = it
+            tokenRequestModel.contact_fcm_notfication_channel = it
+        }
+
 
         ApiClient().getRetrofitObject(
             currentUser()!!.workspace,
@@ -78,6 +84,39 @@ internal class Session() : AppSession {
                     Log.d(LOG_TAG, "FCM token added to server - $token on channel $channel")
                 } else {
                     Log.d(LOG_TAG, "FCM token failure error due to server - ${response.code()}")
+                }
+            }
+        })
+    }
+
+    override fun updateJPushRegistrationId(registrationId: String, channel: String?) {
+        if (currentUser() == null) {
+            Log.d(LOG_TAG, "No current user while trying to update the JPush Registration ID")
+        }
+
+        val jPushRegistrationIdRequestModel = JPushRegistrationIdRequestModel()
+        jPushRegistrationIdRequestModel.contact_jpush_device_token = registrationId
+        channel?.let { jPushRegistrationIdRequestModel.contact_jpush_notification_channel = it }
+
+        ApiClient().getRetrofitObject(
+            currentUser()!!.workspace,
+            currentUser()!!.token
+        ).sendJPushRegistrationId(
+            jPushRegistrationIdRequestModel
+        ).enqueue(object : Callback,
+            retrofit2.Callback<JPushRegistrationIdResponseModel> {
+            override fun onFailure(call: Call<JPushRegistrationIdResponseModel>, t: Throwable) {
+                Log.d(LOG_TAG, "JPush Registration ID failure error due to server", t)
+            }
+
+            override fun onResponse(
+                call: Call<JPushRegistrationIdResponseModel>,
+                response: Response<JPushRegistrationIdResponseModel>
+            ) {
+                if (response.code() == 200) {
+                    Log.d(LOG_TAG, "JPush Registration ID added to server - $registrationId")
+                } else {
+                    Log.d(LOG_TAG, "JPush Registration ID failure error due to server - ${response.code()}")
                 }
             }
         })

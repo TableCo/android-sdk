@@ -8,4 +8,5 @@ internal interface AppSession {
     fun logout()
     fun saveSession(user: UserResponseModel)
     fun updateFcmToken(token: String, channel: String?)
+    fun updateJPushRegistrationId(registrationId: String, channel: String?)
 }

@@ -33,4 +33,7 @@ internal interface ApiInterface {
     @GET(API.GET_INSTALLATION_PROPERTIES)
     fun getInstallationProperties(): Call<InstallationPropertiesResponse>
 
+    @POST(API.ADD_JPUSH_REGISTRATION_ID)
+    fun sendJPushRegistrationId(@Body params: JPushRegistrationIdRequestModel): Call<JPushRegistrationIdResponseModel>
+
 }

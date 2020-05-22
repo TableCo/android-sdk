@@ -10,6 +10,7 @@ internal class TableData {
     internal var apiKey = ""
     internal var experienceShortCode: String? = null
     internal var fcmNotificationChannel: String? = null
+    internal var jpushNotificationChannel: String? = null
     @ColorInt internal var themeColor = Color.parseColor("#307AEB")
 
     // Members to reset on logout
