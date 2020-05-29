@@ -10,10 +10,10 @@ android {
     compileSdkVersion 29
     buildToolsVersion "29.0.2"
     defaultConfig {
-        minSdkVersion 16 //TODO: Might need to be 21 for FCM
+        minSdkVersion 16 
         targetSdkVersion 29
-        versionCode 2
-        versionName "0.2.2"
+        versionCode 3
+        versionName "0.3.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
