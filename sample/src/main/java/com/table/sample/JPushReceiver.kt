@@ -4,7 +4,6 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import cn.jpush.android.api.JPushInterface
 import co.table.sdk.TableSDK
 
@@ -39,4 +38,6 @@ open class JPushReceiver() : BroadcastReceiver() {
         mainActivityIntent.putExtra(MainActivity.JPUSH_NOTIFICATION, bundle)
         context.sendBroadcast(mainActivityIntent)
     }
+
+
 }
