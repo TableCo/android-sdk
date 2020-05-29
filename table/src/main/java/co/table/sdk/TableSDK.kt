@@ -7,6 +7,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.text.TextUtils
 import android.util.Log
+import cn.jpush.android.api.JPushInterface
 import co.table.sdk.android.config.*
 import co.table.sdk.android.config.TableData
 import co.table.sdk.android.constants.Common
@@ -20,6 +21,7 @@ import co.table.sdk.android.session.AppSession
 import co.table.sdk.android.session.Session
 import com.google.firebase.iid.FirebaseInstanceId
 import com.google.firebase.messaging.RemoteMessage
+import com.google.gson.Gson
 import com.google.gson.JsonObject
 import retrofit2.Call
 import retrofit2.Response
@@ -91,15 +93,19 @@ class TableSDK private constructor() {
             }
         }
 
-        fun showConversation(jsonObject: JsonObject) {
-            val tableId = jsonObject.get("table_id").asString ?: return
-            val context = activityLifecycleWatcher.currentActivity ?: return
+        fun showConversationJPush(bundle: Bundle) {
+            val jPushExtras = bundle.get(JPushInterface.EXTRA_EXTRA)
+            if (jPushExtras != null && jPushExtras is String) {
+                val jsonFromString = Gson().fromJson(jPushExtras, JsonObject::class.java)
+                val tableId = jsonFromString.get("table_id").asString ?: return
+                val context = activityLifecycleWatcher.currentActivity ?: return
 
-            if (appSession.isAuthenticated()) {
-                val intent = Intent(context, DashboardActivity::class.java)
-                intent.putExtra(DashboardActivity.EXTRA_COLOR_INT, tableData.themeColor)
-                intent.putExtra(DashboardActivity.EXTRA_CONVERSATION_ID, tableId)
-                context.startActivity(intent)
+                if (appSession.isAuthenticated()) {
+                    val intent = Intent(context, DashboardActivity::class.java)
+                    intent.putExtra(DashboardActivity.EXTRA_COLOR_INT, tableData.themeColor)
+                    intent.putExtra(DashboardActivity.EXTRA_CONVERSATION_ID, tableId)
+                    context.startActivity(intent)
+                }
             }
         }
 
@@ -123,8 +129,14 @@ class TableSDK private constructor() {
             return bundle.containsKey("table_id")
         }
 
-        fun isTablePushMessage(jsonObject: JsonObject): Boolean {
-            return jsonObject.has("table_id")
+        fun isTablePushMessageJPush(bundle: Bundle): Boolean {
+            val jPushExtras = bundle.get(JPushInterface.EXTRA_EXTRA)
+            if (jPushExtras != null && jPushExtras is String) {
+                val jsonFromString = Gson().fromJson(jPushExtras, JsonObject::class.java)
+                return jsonFromString.has("table_id")
+            } else {
+                return false;
+            }
         }
 
         internal fun getTableData(): TableData {
