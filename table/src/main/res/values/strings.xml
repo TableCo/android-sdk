@@ -30,4 +30,6 @@
     <string name="flip_camera">Flip Camera</string>
     <string name="end_call">End Call</string>
     <string name="new_message">New Message</string>
+    <string name="jitsi">Jitsi</string>
+    <string name="join">Join</string>
 </resources>

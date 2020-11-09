@@ -9,7 +9,9 @@ import android.os.Bundle
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
 import android.webkit.*
+import android.widget.EditText
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
@@ -26,6 +28,9 @@ import co.table.sdk.android.network.API
 import co.table.sdk.android.network.ApiResponseInterface
 import co.table.sdk.android.network.models.CreateConversationResponseModel
 import kotlinx.android.synthetic.main.activity_dashboard.*
+import co.table.sdk.android.chat.JitsiVideoActivity
+import org.jitsi.meet.sdk.JitsiMeetActivity
+import org.jitsi.meet.sdk.JitsiMeetConferenceOptions
 
 internal class DashboardActivity : AppCompatActivity(), ApiResponseInterface {
 
@@ -299,6 +304,14 @@ internal class DashboardActivity : AppCompatActivity(), ApiResponseInterface {
 
     override fun logoutUser() {
 
+    }
+
+    fun goToJitsi(v: View?) {
+        Log.i("jitsiclick", "hi")
+        val intent = Intent(this, JitsiVideoActivity::class.java).apply {
+
+        }
+        startActivity(intent)
     }
 
     override fun noDataFound(apiTag: String) {

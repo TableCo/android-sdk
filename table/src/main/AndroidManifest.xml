@@ -49,6 +49,10 @@
             android:screenOrientation="portrait"
             android:theme="@style/AppThemeNoActionBar"
             android:windowSoftInputMode="adjustResize" />
+        <activity
+            android:name="co.table.sdk.android.chat.JitsiVideoActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppThemeNoActionBar" />
 
         <service android:name="co.table.sdk.android.service.MyFirebaseMessagingService" />
        <!-- <meta-data
