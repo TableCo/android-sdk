@@ -187,6 +187,13 @@ internal class DashboardActivity : AppCompatActivity(), ApiResponseInterface {
                 intent.putExtra(Constants.B_TOKEN, token)
                 startActivity(intent)
             }
+            fun jitsicall(tenant: String, roomID: String, jwt: String) {
+                var intent = Intent(this@DashboardActivity, JitsiVideoActivity::class.java)
+                intent.putExtra(Constants.B_TENANT, tenant)
+                intent.putExtra(Constants.B_ROOMID, roomID)
+                intent.putExtra(Constants.B_JWT, jwt)
+                startActivity(intent)
+            }
         }, "mobile")
 
         val currentUser = TableSDK.appSession.currentUser()
@@ -306,13 +313,6 @@ internal class DashboardActivity : AppCompatActivity(), ApiResponseInterface {
 
     }
 
-    fun goToJitsi(v: View?) {
-        Log.i("jitsiclick", "hi")
-        val intent = Intent(this, JitsiVideoActivity::class.java).apply {
-
-        }
-        startActivity(intent)
-    }
 
     override fun noDataFound(apiTag: String) {
 
