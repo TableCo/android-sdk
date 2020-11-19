@@ -18,14 +18,14 @@ class JitsiVideoActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_jitsi_video)
 
-        // Initialize default options for Jitsi Meet conferences.
         val serverURL: URL
+        val server: String = "https://" + intent.getStringExtra(Constants.B_SERVER)!! + "/"
         val tenant: String = intent.getStringExtra(Constants.B_TENANT)!!
         val roomID: String = intent.getStringExtra(Constants.B_ROOMID)!!
         val jwt: String = intent.getStringExtra(Constants.B_JWT)!!
 
         serverURL = try {
-            URL("https://8x8.vc/")
+            URL(server)
         } catch (e: MalformedURLException) {
             e.printStackTrace()
             throw RuntimeException("Invalid server URL!")
@@ -41,9 +41,6 @@ class JitsiVideoActivity : AppCompatActivity() {
             .build()
         this.firstLoad = false
         JitsiMeetActivity.launch(this, options)
-
-
-
     }
 
     override fun onResume() {

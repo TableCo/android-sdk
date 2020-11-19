@@ -9,4 +9,5 @@ internal object Constants {
     val B_JWT = "jwt"
     val B_ROOMID = "roomID"
     val B_TENANT = "tenant"
+    val B_SERVER = "server"
 }

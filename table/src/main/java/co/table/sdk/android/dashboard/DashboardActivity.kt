@@ -187,8 +187,10 @@ internal class DashboardActivity : AppCompatActivity(), ApiResponseInterface {
                 intent.putExtra(Constants.B_TOKEN, token)
                 startActivity(intent)
             }
-            fun jitsicall(tenant: String, roomID: String, jwt: String) {
+            @JavascriptInterface
+            fun jitsicall(server: String, tenant: String, roomID: String, jwt: String) {
                 var intent = Intent(this@DashboardActivity, JitsiVideoActivity::class.java)
+                intent.putExtra(Constants.B_SERVER, server)
                 intent.putExtra(Constants.B_TENANT, tenant)
                 intent.putExtra(Constants.B_ROOMID, roomID)
                 intent.putExtra(Constants.B_JWT, jwt)
