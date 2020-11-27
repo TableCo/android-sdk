@@ -97,7 +97,7 @@ internal class DashboardDataViewModel : ObservableViewModel() {
         }
 
         ApiClient().getRetrofitObject(workspace, token)
-            .getTable(GetTableParamsModel("H8o296"))
+            .getTable(GetTableParamsModel(experienceShortCode))
             .enqueue(object : Callback,
                 retrofit2.Callback<GetTableResponseModel> {
                 override fun onFailure(call: Call<GetTableResponseModel>, t: Throwable) {
