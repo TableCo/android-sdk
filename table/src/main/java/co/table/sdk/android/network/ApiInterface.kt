@@ -36,4 +36,7 @@ internal interface ApiInterface {
     @POST(API.ADD_JPUSH_REGISTRATION_ID)
     fun sendJPushRegistrationId(@Body params: JPushRegistrationIdRequestModel): Call<JPushRegistrationIdResponseModel>
 
+    @POST(API.GET_TABLE)
+    fun getTable(@Body params: GetTableParamsModel): Call<GetTableResponseModel>
+
 }

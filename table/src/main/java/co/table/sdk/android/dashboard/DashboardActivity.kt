@@ -74,6 +74,7 @@ internal class DashboardActivity : AppCompatActivity(), ApiResponseInterface {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setDisplayShowHomeEnabled(true)
         supportActionBar?.setDisplayShowTitleEnabled(false)
+        dashboardDataViewModel.getTable(this)
 
         dashboardDataViewModel.shouldShowNewMessage.observe(this, Observer { invalidateOptionsMenu() })
     }
