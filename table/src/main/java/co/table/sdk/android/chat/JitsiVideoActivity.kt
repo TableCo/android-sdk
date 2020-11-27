@@ -49,6 +49,4 @@ class JitsiVideoActivity : AppCompatActivity() {
              finish()
          }
     }
-
-
 }
