@@ -40,6 +40,7 @@ internal class DashboardActivity : AppCompatActivity(), ApiResponseInterface {
     }
 
     private val FILECHOOSER_RESULTCODE = 101
+    private val HANGUP_RESULTCODE = 976
     private var tableId = ""
     lateinit var binding: ActivityDashboardBinding
     lateinit var dashboardDataViewModel: DashboardDataViewModel
@@ -194,7 +195,7 @@ internal class DashboardActivity : AppCompatActivity(), ApiResponseInterface {
                 intent.putExtra(Constants.B_TENANT, tenant)
                 intent.putExtra(Constants.B_ROOMID, roomID)
                 intent.putExtra(Constants.B_JWT, jwt)
-                startActivity(intent)
+                startActivityForResult(intent,HANGUP_RESULTCODE)
             }
         }, "mobile")
 
@@ -236,6 +237,15 @@ internal class DashboardActivity : AppCompatActivity(), ApiResponseInterface {
             } else {
                 webViewFileCallback?.onReceiveValue(null)
                 webViewFileCallback = null
+            }
+        }
+        
+        else if (requestCode == HANGUP_RESULTCODE) {
+            val js = "window.TableCommand('jitsi-hangup', 1)"
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+                webView.evaluateJavascript(js) {
+
+                }
             }
         }
     }
