@@ -9,4 +9,5 @@ object API {
     const val AUTH_USER = "/user-service/user/auth/sdk-chat-user"
     const val CREATE_CONVERSATION = "/table-service/table"
     const val ADD_JPUSH_REGISTRATION_ID = "/user-service/user/add_contact_jpush_device_token"
+    const val GET_TABLE = "/table-service/table-for-experience"
 }

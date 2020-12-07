@@ -26,7 +26,6 @@ internal class ApiClient {
                         .header("Authorization", "$authToken")
                         .method(original.method, original.body)
                         .build()
-
                     return it.proceed(request)
                 }
             })

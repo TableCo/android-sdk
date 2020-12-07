@@ -29,6 +29,7 @@ import co.table.sdk.android.network.ApiResponseInterface
 import co.table.sdk.android.network.models.CreateConversationResponseModel
 import kotlinx.android.synthetic.main.activity_dashboard.*
 import co.table.sdk.android.chat.JitsiVideoActivity
+import co.table.sdk.android.network.models.GetTableResponseModel
 import org.jitsi.meet.sdk.JitsiMeetActivity
 import org.jitsi.meet.sdk.JitsiMeetConferenceOptions
 
@@ -74,6 +75,7 @@ internal class DashboardActivity : AppCompatActivity(), ApiResponseInterface {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setDisplayShowHomeEnabled(true)
         supportActionBar?.setDisplayShowTitleEnabled(false)
+        dashboardDataViewModel.getTable(this)
 
         dashboardDataViewModel.shouldShowNewMessage.observe(this, Observer { invalidateOptionsMenu() })
     }
@@ -278,6 +280,16 @@ internal class DashboardActivity : AppCompatActivity(), ApiResponseInterface {
                     webView.loadUrl(TableSDK.appSession.currentUser()?.workspace + "/conversation/" + it.conversationId)
                 }
             }
+            API.GET_TABLE -> {
+                Common.dismissProgressDialog()
+                val conversationResponseModel = successResponse as? GetTableResponseModel
+                conversationResponseModel?.let {
+                    val token = TableSDK.appSession.currentUser()?.token
+
+                    webView.loadUrl(TableSDK.appSession.currentUser()?.workspace + "/conversation/${it.tableId}?webview=android&token=${token}")
+                }
+
+            }
         }
     }
 
@@ -293,6 +305,7 @@ internal class DashboardActivity : AppCompatActivity(), ApiResponseInterface {
                 val dialog = builder.create()
                 dialog.show()
             }
+            
         }
     }
 
