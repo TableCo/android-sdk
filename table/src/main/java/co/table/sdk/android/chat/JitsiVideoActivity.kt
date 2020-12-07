@@ -13,6 +13,7 @@ import java.net.URL
 
 class JitsiVideoActivity : AppCompatActivity() {
     var firstLoad: Boolean = true
+    private val HANGUP_RESULTCODE = 976
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -46,6 +47,7 @@ class JitsiVideoActivity : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
          if (!firstLoad){
+            setResult(HANGUP_RESULTCODE);
              finish()
          }
     }
