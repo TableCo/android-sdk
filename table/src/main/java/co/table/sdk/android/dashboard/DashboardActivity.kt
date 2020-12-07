@@ -9,7 +9,9 @@ import android.os.Bundle
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
 import android.webkit.*
+import android.widget.EditText
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
@@ -26,6 +28,9 @@ import co.table.sdk.android.network.API
 import co.table.sdk.android.network.ApiResponseInterface
 import co.table.sdk.android.network.models.CreateConversationResponseModel
 import kotlinx.android.synthetic.main.activity_dashboard.*
+import co.table.sdk.android.chat.JitsiVideoActivity
+import org.jitsi.meet.sdk.JitsiMeetActivity
+import org.jitsi.meet.sdk.JitsiMeetConferenceOptions
 
 internal class DashboardActivity : AppCompatActivity(), ApiResponseInterface {
 
@@ -35,6 +40,7 @@ internal class DashboardActivity : AppCompatActivity(), ApiResponseInterface {
     }
 
     private val FILECHOOSER_RESULTCODE = 101
+    private val HANGUP_RESULTCODE = 976
     private var tableId = ""
     lateinit var binding: ActivityDashboardBinding
     lateinit var dashboardDataViewModel: DashboardDataViewModel
@@ -182,6 +188,15 @@ internal class DashboardActivity : AppCompatActivity(), ApiResponseInterface {
                 intent.putExtra(Constants.B_TOKEN, token)
                 startActivity(intent)
             }
+            @JavascriptInterface
+            fun jitsicall(server: String, tenant: String, roomID: String, jwt: String) {
+                var intent = Intent(this@DashboardActivity, JitsiVideoActivity::class.java)
+                intent.putExtra(Constants.B_SERVER, server)
+                intent.putExtra(Constants.B_TENANT, tenant)
+                intent.putExtra(Constants.B_ROOMID, roomID)
+                intent.putExtra(Constants.B_JWT, jwt)
+                startActivityForResult(intent,HANGUP_RESULTCODE)
+            }
         }, "mobile")
 
         val currentUser = TableSDK.appSession.currentUser()
@@ -222,6 +237,15 @@ internal class DashboardActivity : AppCompatActivity(), ApiResponseInterface {
             } else {
                 webViewFileCallback?.onReceiveValue(null)
                 webViewFileCallback = null
+            }
+        }
+        
+        else if (requestCode == HANGUP_RESULTCODE) {
+            val js = "window.TableCommand('jitsi-hangup', 1)"
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+                webView.evaluateJavascript(js) {
+
+                }
             }
         }
     }
@@ -300,6 +324,7 @@ internal class DashboardActivity : AppCompatActivity(), ApiResponseInterface {
     override fun logoutUser() {
 
     }
+
 
     override fun noDataFound(apiTag: String) {
 
