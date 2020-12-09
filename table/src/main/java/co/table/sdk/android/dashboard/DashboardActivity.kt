@@ -48,6 +48,7 @@ internal class DashboardActivity : AppCompatActivity(), ApiResponseInterface {
     var webViewFileCallback: ValueCallback<Array<Uri>>? = null
     private var showNewMessageMenu = false
     private var initialUrl: String? = null
+    private var initialBack: Boolean = true
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -269,7 +270,13 @@ internal class DashboardActivity : AppCompatActivity(), ApiResponseInterface {
     }
 
     private fun onBackClick() {
-        if (webView.canGoBack()) {
+        if (initialBack){
+            val currentUser = TableSDK.appSession.currentUser()
+            val tokenValue: String = currentUser!!.token!!
+            webView.loadUrl(TableSDK.appSession.currentUser()?.workspace + "/conversation?webview=android&token=$tokenValue")
+            initialBack = false
+        }
+        else if (webView.canGoBack()) {
             webView.goBack()
         } else {
             super.onBackPressed()
@@ -307,7 +314,6 @@ internal class DashboardActivity : AppCompatActivity(), ApiResponseInterface {
         when (apiTag) {
             API.CREATE_CONVERSATION -> {
                 Common.dismissProgressDialog()
-
                 val builder = AlertDialog.Builder(this)
                 builder.setTitle("Error")
                 builder.setMessage("Error creating new conversation ${errorMessage ?: ""}")
@@ -323,7 +329,6 @@ internal class DashboardActivity : AppCompatActivity(), ApiResponseInterface {
         when (apiTag) {
             API.CREATE_CONVERSATION -> {
                 Common.dismissProgressDialog()
-
                 val builder = AlertDialog.Builder(this)
                 builder.setTitle("Error")
                 builder.setMessage("Error creating new conversation")
