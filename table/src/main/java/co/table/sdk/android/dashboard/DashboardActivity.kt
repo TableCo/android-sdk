@@ -29,6 +29,7 @@ import co.table.sdk.android.network.ApiResponseInterface
 import co.table.sdk.android.network.models.CreateConversationResponseModel
 import kotlinx.android.synthetic.main.activity_dashboard.*
 import co.table.sdk.android.chat.JitsiVideoActivity
+import co.table.sdk.android.network.models.GetTableResponseModel
 import org.jitsi.meet.sdk.JitsiMeetActivity
 import org.jitsi.meet.sdk.JitsiMeetConferenceOptions
 
@@ -47,6 +48,7 @@ internal class DashboardActivity : AppCompatActivity(), ApiResponseInterface {
     var webViewFileCallback: ValueCallback<Array<Uri>>? = null
     private var showNewMessageMenu = false
     private var initialUrl: String? = null
+    private var initialBack: Boolean = true
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -75,6 +77,7 @@ internal class DashboardActivity : AppCompatActivity(), ApiResponseInterface {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setDisplayShowHomeEnabled(true)
         supportActionBar?.setDisplayShowTitleEnabled(false)
+        dashboardDataViewModel.getTable(this)
 
         dashboardDataViewModel.shouldShowNewMessage.observe(this, Observer { invalidateOptionsMenu() })
     }
@@ -267,7 +270,13 @@ internal class DashboardActivity : AppCompatActivity(), ApiResponseInterface {
     }
 
     private fun onBackClick() {
-        if (webView.canGoBack()) {
+        if (initialBack){
+            val currentUser = TableSDK.appSession.currentUser()
+            val tokenValue: String = currentUser!!.token!!
+            webView.loadUrl(TableSDK.appSession.currentUser()?.workspace + "/conversation?webview=android&token=$tokenValue")
+            initialBack = false
+        }
+        else if (webView.canGoBack()) {
             webView.goBack()
         } else {
             super.onBackPressed()
@@ -288,6 +297,16 @@ internal class DashboardActivity : AppCompatActivity(), ApiResponseInterface {
                     webView.loadUrl(TableSDK.appSession.currentUser()?.workspace + "/conversation/" + it.conversationId)
                 }
             }
+            API.GET_TABLE -> {
+                Common.dismissProgressDialog()
+                val conversationResponseModel = successResponse as? GetTableResponseModel
+                conversationResponseModel?.let {
+                    val token = TableSDK.appSession.currentUser()?.token
+
+                    webView.loadUrl(TableSDK.appSession.currentUser()?.workspace + "/conversation/${it.tableId}?webview=android&token=${token}")
+                }
+
+            }
         }
     }
 
@@ -295,7 +314,6 @@ internal class DashboardActivity : AppCompatActivity(), ApiResponseInterface {
         when (apiTag) {
             API.CREATE_CONVERSATION -> {
                 Common.dismissProgressDialog()
-
                 val builder = AlertDialog.Builder(this)
                 builder.setTitle("Error")
                 builder.setMessage("Error creating new conversation ${errorMessage ?: ""}")
@@ -303,6 +321,7 @@ internal class DashboardActivity : AppCompatActivity(), ApiResponseInterface {
                 val dialog = builder.create()
                 dialog.show()
             }
+            
         }
     }
 
@@ -310,7 +329,6 @@ internal class DashboardActivity : AppCompatActivity(), ApiResponseInterface {
         when (apiTag) {
             API.CREATE_CONVERSATION -> {
                 Common.dismissProgressDialog()
-
                 val builder = AlertDialog.Builder(this)
                 builder.setTitle("Error")
                 builder.setMessage("Error creating new conversation")
