@@ -192,12 +192,13 @@ internal class DashboardActivity : AppCompatActivity(), ApiResponseInterface {
                 startActivity(intent)
             }
             @JavascriptInterface
-            fun jitsicall(server: String, tenant: String, roomID: String, jwt: String) {
+            fun jitsicall(server: String, tenant: String, roomID: String, jwt: String, audio_call:Boolean) {
                 var intent = Intent(this@DashboardActivity, JitsiVideoActivity::class.java)
                 intent.putExtra(Constants.B_SERVER, server)
                 intent.putExtra(Constants.B_TENANT, tenant)
                 intent.putExtra(Constants.B_ROOMID, roomID)
                 intent.putExtra(Constants.B_JWT, jwt)
+                intent.putExtra(Constants.B_AUDIOCALL, audio_call)
                 startActivityForResult(intent,HANGUP_RESULTCODE)
             }
         }, "mobile")
