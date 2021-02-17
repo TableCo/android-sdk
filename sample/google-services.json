@@ -1,0 +1,83 @@
+{
+  "project_info": {
+    "project_number": "432504917864",
+    "firebase_url": "https://table-sample-apps.firebaseio.com",
+    "project_id": "table-sample-apps",
+    "storage_bucket": "table-sample-apps.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:432504917864:android:e69673f2f6965fddf790dd",
+        "android_client_info": {
+          "package_name": "com.table.sample"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "432504917864-6o4pid7of8f2rrdvl0p56qk2lh62fum7.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAoraNhPvyn9-np0V22nHESkkE3knA7NDk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "432504917864-6o4pid7of8f2rrdvl0p56qk2lh62fum7.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "432504917864-6oul6do1m63l54equknmr5jfreoosqgo.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.reactnative.ios.tablesdksample"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:432504917864:android:a95c6ccebfb4207af790dd",
+        "android_client_info": {
+          "package_name": "com.tablesdksample"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "432504917864-6o4pid7of8f2rrdvl0p56qk2lh62fum7.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAoraNhPvyn9-np0V22nHESkkE3knA7NDk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "432504917864-6o4pid7of8f2rrdvl0p56qk2lh62fum7.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "432504917864-6oul6do1m63l54equknmr5jfreoosqgo.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.reactnative.ios.tablesdksample"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
