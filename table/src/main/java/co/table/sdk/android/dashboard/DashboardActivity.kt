@@ -28,6 +28,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import co.table.sdk.TableSDK
+import co.table.sdk.android.BuildConfig
 import co.table.sdk.android.R
 import co.table.sdk.android.chat.VideoActivity
 import co.table.sdk.android.constants.Common
@@ -360,11 +361,7 @@ internal class DashboardActivity : AppCompatActivity(), ApiResponseInterface,  A
                 }
                 // Continue only if the File was successfully created
                 photoFile?.also {
-                    val photoURI: Uri = FileProvider.getUriForFile(
-                        this,
-                        "co.table.agent.android.fileprovider",
-                        it
-                    )
+                    val photoURI: Uri = FileProvider.getUriForFile(applicationContext, BuildConfig.LIBRARY_PACKAGE_NAME + ".fileprovider", it)
                     currentPhotoPath = photoURI.toString()
                     takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI)
                     startActivityForResult(takePictureIntent, CAMERA_RESULTCODE)
@@ -386,11 +383,7 @@ internal class DashboardActivity : AppCompatActivity(), ApiResponseInterface,  A
                 }
                 // Continue only if the File was successfully created
                 videoFile?.also {
-                    val videoURI: Uri = FileProvider.getUriForFile(
-                        this,
-                        "co.table.agent.android.fileprovider",
-                        it
-                    )
+                    val videoURI: Uri = FileProvider.getUriForFile(applicationContext, BuildConfig.LIBRARY_PACKAGE_NAME + ".fileprovider", it)
                     currentVideoPath = videoURI.toString()
                     takeVideoIntent.putExtra(MediaStore.EXTRA_OUTPUT, videoURI)
                     // High quality (either this or 'MMS quality')
