@@ -15,10 +15,7 @@ import android.provider.MediaStore
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
-import android.view.View
 import android.webkit.*
-import android.widget.EditText
-import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
@@ -30,7 +27,6 @@ import androidx.lifecycle.ViewModelProviders
 import co.table.sdk.TableSDK
 import co.table.sdk.android.BuildConfig
 import co.table.sdk.android.R
-import co.table.sdk.android.chat.VideoActivity
 import co.table.sdk.android.constants.Common
 import co.table.sdk.android.constants.Constants
 import co.table.sdk.android.databinding.ActivityDashboardBinding
@@ -41,12 +37,6 @@ import co.table.sdk.android.network.models.CreateConversationResponseModel
 import kotlinx.android.synthetic.main.activity_dashboard.*
 import co.table.sdk.android.chat.JitsiVideoActivity
 import co.table.sdk.android.network.models.GetTableResponseModel
-import org.jitsi.meet.sdk.JitsiMeetActivity
-import org.jitsi.meet.sdk.JitsiMeetConferenceOptions
-import java.io.File
-import java.io.IOException
-import java.text.SimpleDateFormat
-import java.util.*
 
 const val PERMISSION_REQUEST_CAMERA = 0
 
@@ -201,17 +191,9 @@ internal class DashboardActivity : AppCompatActivity(), ApiResponseInterface,  A
         }
 
         webView.addJavascriptInterface(object {
+
             @JavascriptInterface
-            fun videocall(sessionId: String, token: String) {
-                var intent = Intent(this@DashboardActivity, VideoActivity::class.java)
-                Log.i("sessionId", sessionId)
-                Log.i("token", token)
-                intent.putExtra(Constants.B_SESSION_ID, sessionId)
-                intent.putExtra(Constants.B_TOKEN, token)
-                startActivity(intent)
-            }
-            @JavascriptInterface
-            fun jitsicall(server: String, tenant: String, roomID: String, jwt: String, audio_call:Boolean) {
+            fun jitsicall(server: String, tenant: String, roomID: String, jwt: String) {
                 var intent = Intent(this@DashboardActivity, JitsiVideoActivity::class.java)
                 intent.putExtra(Constants.B_SERVER, server)
                 intent.putExtra(Constants.B_TENANT, tenant)
