@@ -24,7 +24,8 @@ class JitsiVideoActivity : AppCompatActivity() {
         val tenant: String = intent.getStringExtra(Constants.B_TENANT)!!
         val roomID: String = intent.getStringExtra(Constants.B_ROOMID)!!
         val jwt: String = intent.getStringExtra(Constants.B_JWT)!!
-
+        val audio_call = intent.getBooleanExtra(Constants.B_AUDIOCALL, false)
+        val options : JitsiMeetConferenceOptions
         serverURL = try {
             URL(server)
         } catch (e: MalformedURLException) {
@@ -36,10 +37,22 @@ class JitsiVideoActivity : AppCompatActivity() {
                 .setWelcomePageEnabled(false)
                 .build()
         JitsiMeet.setDefaultConferenceOptions(defaultOptions)
-        val options = JitsiMeetConferenceOptions.Builder()
+        val videoOptions = JitsiMeetConferenceOptions.Builder()
             .setRoom("$tenant/$roomID")
             .setToken(jwt)
             .build()
+        val audioOptions = JitsiMeetConferenceOptions.Builder()
+            .setRoom("$tenant/$roomID")
+            .setToken(jwt)
+            .setAudioOnly(true)
+            .build()
+
+        options = if(audio_call){
+            audioOptions
+        } else {
+            videoOptions
+        }
+
         this.firstLoad = false
         JitsiMeetActivity.launch(this, options)
     }
