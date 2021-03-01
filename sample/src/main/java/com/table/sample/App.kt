@@ -27,7 +27,7 @@ class App : Application() {
             }
         }
 
-        TableSDK.init(this, "YOUR_WORKSPACE_URL","YOUR_API_KEY", null, getString(R.string.table_notification_channel))
+        TableSDK.init(this, "adittes.dev.table.co","test_key", "H8o296", getString(R.string.table_notification_channel))
     }
 
 }
