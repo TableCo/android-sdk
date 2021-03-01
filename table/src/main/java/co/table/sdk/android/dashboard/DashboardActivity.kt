@@ -16,6 +16,7 @@ import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.webkit.*
+import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
@@ -37,6 +38,12 @@ import co.table.sdk.android.network.models.CreateConversationResponseModel
 import kotlinx.android.synthetic.main.activity_dashboard.*
 import co.table.sdk.android.chat.JitsiVideoActivity
 import co.table.sdk.android.network.models.GetTableResponseModel
+import org.jitsi.meet.sdk.JitsiMeetActivity
+import org.jitsi.meet.sdk.JitsiMeetConferenceOptions
+import java.io.File
+import java.io.IOException
+import java.text.SimpleDateFormat
+import java.util.*
 
 const val PERMISSION_REQUEST_CAMERA = 0
 
@@ -193,7 +200,7 @@ internal class DashboardActivity : AppCompatActivity(), ApiResponseInterface,  A
         webView.addJavascriptInterface(object {
 
             @JavascriptInterface
-            fun jitsicall(server: String, tenant: String, roomID: String, jwt: String) {
+            fun jitsicall(server: String, tenant: String, roomID: String, jwt: String, audio_call: Boolean) {
                 var intent = Intent(this@DashboardActivity, JitsiVideoActivity::class.java)
                 intent.putExtra(Constants.B_SERVER, server)
                 intent.putExtra(Constants.B_TENANT, tenant)
