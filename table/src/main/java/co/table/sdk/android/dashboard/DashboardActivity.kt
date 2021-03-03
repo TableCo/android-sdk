@@ -236,7 +236,7 @@ internal class DashboardActivity : AppCompatActivity(), ApiResponseInterface,  A
         val request =  DownloadManager.Request(uri)
         request.setTitle(fileName)
         request.setDescription("Download File")
-        request.setDestinationInExternalPublicDir( Environment.DIRECTORY_DOWNLOADS,fileName)
+        request.setDestinationInExternalFilesDir(this, Environment.DIRECTORY_DOWNLOADS,fileName)
         request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED)
          val downloadManager =  getSystemService(DOWNLOAD_SERVICE) as DownloadManager
        downloadID = downloadManager.enqueue(request);
