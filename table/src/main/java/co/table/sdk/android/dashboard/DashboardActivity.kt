@@ -3,6 +3,7 @@ package co.table.sdk.android.dashboard
 import android.Manifest
 import android.app.Activity
 import android.app.Dialog
+import android.app.DownloadManager
 import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
@@ -11,6 +12,7 @@ import android.graphics.Color
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.os.Environment
 import android.provider.MediaStore
 import android.util.Log
 import android.view.Menu
@@ -66,6 +68,7 @@ internal class DashboardActivity : AppCompatActivity(), ApiResponseInterface,  A
     private var showNewMessageMenu = false
     private var initialUrl: String? = null
     private var initialBack: Boolean = true
+    private var downloadID: Long = 0;
 
     lateinit var currentPhotoPath: String
     lateinit var currentVideoPath: String
@@ -209,6 +212,10 @@ internal class DashboardActivity : AppCompatActivity(), ApiResponseInterface,  A
                 intent.putExtra(Constants.B_AUDIOCALL, audio_call)
                 startActivityForResult(intent,HANGUP_RESULTCODE)
             }
+            @JavascriptInterface
+            fun downloadFile(uri: String) {
+                startFileDownload(uri);
+            }
         }, "mobile")
 
         val currentUser = TableSDK.appSession.currentUser()
@@ -221,6 +228,18 @@ internal class DashboardActivity : AppCompatActivity(), ApiResponseInterface,  A
             TableSDK.appSession.currentUser()?.workspace + "/conversation?webview=android&token=$tokenValue"
         }
         webView.loadUrl(initialUrl)
+    }
+    private fun startFileDownload(uriString: String){
+        val timeStamp: String = SimpleDateFormat("yyyyMMdd_HHmmss", Locale.US).format(Date())
+        val fileName = "Download_${timeStamp}_" + ".jpg";
+        val uri = Uri.parse(uriString);
+        val request =  DownloadManager.Request(uri)
+        request.setTitle(fileName)
+        request.setDescription("Download File")
+        request.setDestinationInExternalFilesDir(this, Environment.DIRECTORY_DOWNLOADS,fileName)
+        request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED)
+         val downloadManager =  getSystemService(DOWNLOAD_SERVICE) as DownloadManager
+       downloadID = downloadManager.enqueue(request);
     }
     private fun requestCameraPermission(requestType: RequestType) {
         lastPermissionRequestType = requestType
