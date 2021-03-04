@@ -9,6 +9,8 @@ import co.table.sdk.android.network.ApiClient
 import co.table.sdk.android.network.ApiResponseInterface
 import co.table.sdk.android.network.models.CreateConversationParamsModel
 import co.table.sdk.android.network.models.CreateConversationResponseModel
+import co.table.sdk.android.network.models.GetTableParamsModel
+import co.table.sdk.android.network.models.GetTableResponseModel
 import retrofit2.Call
 import retrofit2.Response
 import javax.security.auth.callback.Callback
@@ -82,5 +84,36 @@ internal class DashboardDataViewModel : ObservableViewModel() {
                         }
                     }
                 })
+    }
+
+    fun getTable(responseInterface: ApiResponseInterface) {
+        val workspace = TableSDK.appSession.currentUser()?.workspace
+        val experienceShortCode = TableSDK.appSession.currentUser()?.experienceShortCode
+        val token = TableSDK.appSession.currentUser()?.token
+
+        if (workspace == null || token == null) {
+            responseInterface.onFailureRetrofit("No workspace or token", API.GET_TABLE)
+            return
+        }
+
+        ApiClient().getRetrofitObject(workspace, token)
+            .getTable(GetTableParamsModel(experienceShortCode))
+            .enqueue(object : Callback,
+                retrofit2.Callback<GetTableResponseModel> {
+                override fun onFailure(call: Call<GetTableResponseModel>, t: Throwable) {
+                    responseInterface.onFailureRetrofit(t.localizedMessage, API.GET_TABLE)
+                }
+
+                override fun onResponse(
+                    call: Call<GetTableResponseModel>,
+                    response: Response<GetTableResponseModel>
+                ) {
+                    if (response.code() == 200) {
+                        responseInterface.onSuccess(response.body(), API.GET_TABLE)
+                    } else {
+                        responseInterface.onFailureDueToServer(response.errorBody()?.string(), API.GET_TABLE)
+                    }
+                }
+            })
     }
 }

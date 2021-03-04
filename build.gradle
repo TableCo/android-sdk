@@ -9,7 +9,7 @@ buildscript {
         maven { url 'https://maven.fabric.io/public' }
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.6.3'
+        classpath 'com.android.tools.build:gradle:4.1.0'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
         classpath 'com.github.dcendents:android-maven-gradle-plugin:2.1'
         // NOTE: Do not place your application dependencies here; they belong
@@ -25,6 +25,7 @@ allprojects {
         jcenter()
         maven { url "http://tokbox.bintray.com/maven" }
         maven { url 'https://jitpack.io' }
+        maven { url "https://github.com/jitsi/jitsi-maven-repository/raw/master/releases" }
     }
 }
 
