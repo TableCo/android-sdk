@@ -213,8 +213,8 @@ internal class DashboardActivity : AppCompatActivity(), ApiResponseInterface,  A
                 startActivityForResult(intent,HANGUP_RESULTCODE)
             }
             @JavascriptInterface
-            fun downloadFile(uri: String) {
-                startFileDownload(uri);
+            fun downloadFile(uri: String, filename: String) {
+                startFileDownload(uri, filename);
             }
         }, "mobile")
 
@@ -229,9 +229,7 @@ internal class DashboardActivity : AppCompatActivity(), ApiResponseInterface,  A
         }
         webView.loadUrl(initialUrl)
     }
-    private fun startFileDownload(uriString: String){
-        val timeStamp: String = SimpleDateFormat("yyyyMMdd_HHmmss", Locale.US).format(Date())
-        val fileName = "Download_${timeStamp}_" + ".jpg";
+    private fun startFileDownload(uriString: String, fileName: String){
         val uri = Uri.parse(uriString);
         val request =  DownloadManager.Request(uri)
         request.setTitle(fileName)
